@@ -8,42 +8,69 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'login',
         children: [
           {
             path: '',
-            loadChildren: '../tab1/tab1.module#Tab1PageModule'
+            loadChildren: '../login/login.module#LoginPageModule'
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'register',
         children: [
           {
             path: '',
-            loadChildren: '../tab2/tab2.module#Tab2PageModule'
+            loadChildren: '../register/register.module#RegisterPageModule'
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'service',
         children: [
           {
             path: '',
-            loadChildren: '../tab3/tab3.module#Tab3PageModule'
+            loadChildren: '../service/service.module#ServicePageModule'
+          }
+        ]
+      },
+      {
+        path: 'option',
+        children: [
+          {
+            path: '',
+            loadChildren: '../option/option.module#OptionPageModule'
+          }
+        ]
+      },
+      {
+        path: 'form',
+        children: [
+          {
+            path: '',
+            loadChildren: '../form/form.module#FormPageModule'
+          }
+        ]
+      },
+      {
+        path: 'home',
+        children: [
+          {
+            path: '',
+            loadChildren: '../home/home.module#HomePageModule'
           }
         ]
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/login',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/login',
     pathMatch: 'full'
   }
 ];

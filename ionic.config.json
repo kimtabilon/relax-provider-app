@@ -1,5 +1,7 @@
 {
-  "name": "photo-gallery",
-  "integrations": {},
+  "name": "relax-app",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

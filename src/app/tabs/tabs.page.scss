@@ -1,1 +1,43 @@
 
+:host {
+	.circle {
+		background: rgb(239,71,58);
+		height: 20px;
+		border-bottom-left-radius: 50%;
+  		border-bottom-right-radius: 50%;
+		// border-: 50%;
+		padding:0;
+		margin-bottom: -13px;
+		margin-top: -13px;
+		z-index: 50 !important;
+	}
+
+	ion-tabs {
+		border-radius: 50%/100px 100px 0 0;
+		// z-index: 1 !important;
+
+		.home-tab {
+			z-index: 400 !important;
+		}
+		
+		ion-tab-button {
+			background: #B8292D;
+			// z-index: 1 !important;
+
+			ion-icon {
+				color: #F54B3E;
+			}
+
+			.home-btn {
+				color: #AF7933;
+				background: #F2AA49;
+				border: 4px solid #B8292D;
+				// font-size: 21pt;
+				border-radius: 50%;
+				padding: 5px;
+				margin-top: -5px;
+			}
+		}
+	}
+
+}

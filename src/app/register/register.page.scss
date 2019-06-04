@@ -1,0 +1,82 @@
+:host {
+  ion-content {
+  	.body {
+  		// --background: url('https://images.pexels.com/photos/1432942/pexels-photo-1432942.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') no-repeat 100% 100%;
+	  	min-height:100%;
+		background:linear-gradient(0deg,rgba(199,44,60,.8),rgba(199,44,60,.9)),url('../../assets/img/bg-img-sm.png');
+		background-size:cover;
+		width: 100%;
+		// --background: url('../../assets/img/bg-img-sm.png') no-repeat 100% 100%;
+  	}
+
+  	.btn {
+  		border-radius: 40px;
+  		display: block;
+  		width: 70%;
+  		margin: 5px auto;
+  		padding: 7px;
+  		font-size: 10pt;
+  	}
+
+  	.btn-login {
+  		border: 2px solid #F4AC4A;
+  		background: #F4AC4A;
+  		color: #333;
+  	}
+
+  	.btn-signup {
+  		background: none;
+  		border: 2px solid #F4AC4A;
+  		color: #eee;
+  	}
+
+  	.form-field {
+  		padding: 0 20px;
+  		color: #F4AC4A;
+  		margin-bottom: 20px;
+
+  		.icon {
+  			margin-bottom: -12px;
+  		}
+
+      .calendar {
+        margin-bottom: -20px;
+      }
+
+      .text-label {
+        font-size: 8pt;
+        color: #F4AC4A;
+        margin-bottom: -12px;
+        margin-top: 10px;
+      }
+
+  		.field {
+  			border-bottom: 1px solid #F4AC4A;
+  		}
+  	}
+	    
+	.login {
+		.logo-wrap {
+			text-align: center;
+
+			.logo {
+				margin-top: 10px;
+				width: 100px;
+			}
+
+			.label {
+				padding: 3px 30px;
+				border-radius: 10px;
+				background: #A32729;
+				color: #fff;
+				font-size: 10pt;
+				margin-top: 20px;
+				margin-bottom: 20px;
+			}
+		}
+			
+	} 
+
+  }
+
+}

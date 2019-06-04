@@ -1,0 +1,80 @@
+
+<ion-content>
+  <div class="body">
+    <ion-row>
+      <ion-col col-6><img src="../../assets/img/header-logo.png" class="logo"></ion-col>
+      <ion-col col-6><button class="signout-btn" routerLink="/login" routerDirection="root">Signout</button></ion-col>
+    </ion-row>
+    <ion-row class="user">
+      <ion-col col-12>
+        <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
+        <span class="label">Welcome Back</span><br>
+        <span class="name">Jason</span><br>
+      </ion-col>
+    </ion-row>
+
+    <span class="service-label">
+      Car Service
+    </span>
+    <span class="service-label">
+      Battery Replacement
+    </span>
+  </div>  
+
+  <ion-row padding class="form-header"><ion-col class="text-center">Vehicle Information</ion-col></ion-row>
+  <ion-row padding class="form-bar">
+  	<ul class="progress">
+	  <li class="progress__circle progress--active"></li>
+	  <li class="progress__bar"></li>
+	  <li class="progress__circle"></li>
+	  <li class="progress__bar"></li>
+	  <li class="progress__circle"></li>
+	</ul>
+
+  </ion-row>
+
+  <ion-row padding>
+	  <ion-input class="field" placeholder="Year"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="calendar" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <ion-row padding class="field-wrap">
+	  <ion-input class="field" placeholder="Make"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="apps" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <ion-row padding class="field-wrap">
+	  <ion-input class="field" placeholder="Model"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="barcode" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <ion-row padding class="field-wrap">
+	  <ion-input class="field" placeholder="Transmission"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="cog" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <ion-row padding class="form-header"><ion-col class="text-center">Additional Information</ion-col></ion-row>
+  <ion-row padding class="form-bar">
+  	<ul class="progress">
+	  <li class="progress__circle progress--active progress--done"></li>
+	  <li class="progress__bar progress--done"></li>
+	  <li class="progress__circle progress--active"></li>
+	  <li class="progress__bar"></li>
+	  <li class="progress__circle"></li>
+	</ul>
+
+  </ion-row>
+
+  <ion-row padding>
+	  <ion-input class="field" placeholder="Date / time of service"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="calendar" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <ion-row padding class="field-wrap">
+	  <ion-input class="field" placeholder="Contact Number"></ion-input>
+	  <ion-label class="field-label"><ion-icon name="phone-portrait" class="field-icon"></ion-icon></ion-label>
+  </ion-row>
+
+  <button class="btn btn-login" routerLink="/tabs/service" routerDirection="root" >SUBMIT</button>
+    
+</ion-content>

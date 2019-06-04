@@ -8,7 +8,15 @@
 }
 
 :host {
-
+	.body {
+  		// --background: url('https://images.pexels.com/photos/1432942/pexels-photo-1432942.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') no-repeat 100% 100%;
+	  	// min-height:100%;
+		background:linear-gradient(0deg,rgba(199,44,60,.8),rgba(199,44,60,.9)),url('../../assets/img/bg-img-sm.png');
+		background-size:cover;
+		width: 100%;
+		// --background: url('../../assets/img/bg-img-sm.png') no-repeat 100% 100%;
+  	}
+  	
 	.logo {
 		width: 200px;
 		margin-top: -5px;

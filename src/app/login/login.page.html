@@ -1,0 +1,32 @@
+<ion-content>
+	<div class="body login">
+		<ion-row>
+			<ion-col col-12 class="logo-wrap">
+				<img src="../../assets/img/login-logo.png" class="logo"><br><br>
+				<span class="label">LOGIN</span><br><br>
+			</ion-col>
+		</ion-row>		
+
+		<form (ngSubmit)="login()" #registerForm="ngForm" >
+			<div class="form-field">
+		      <ion-row class="field-warp">
+			        <ion-label><ion-icon name="person" class="icon"></ion-icon></ion-label>
+			        <ion-input placeholder="Email" class="field"></ion-input>
+			  </ion-row>
+			      
+			  <ion-row class="field-warp">
+			        <ion-label><ion-icon name="lock" class="icon"></ion-icon></ion-label>
+			        <ion-input placeholder="Password" type="password" class="field"></ion-input>  
+		      </ion-row>
+		  </div>    
+	      
+	      <ion-row>
+	        <ion-col class="signup-col">
+	          <button class="btn btn-login" routerLink="/tabs/service" routerDirection="root">LOGIN</button>
+	          <button class="btn btn-signup" routerLink="/register" routerDirection="root" >SIGN UP</button>
+	        </ion-col>
+	      </ion-row>
+	      
+	    </form>
+	</div>
+</ion-content>
