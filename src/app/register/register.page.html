@@ -7,60 +7,92 @@
 			</ion-col>
 		</ion-row>		
 
-		<form (ngSubmit)="login()" #registerForm="ngForm" >
+		<form #form="ngForm" (ngSubmit)="register(form)" method="post">
 			<div class="form-field">
 			  <ion-row class="field-warp">
 			        <ion-label><ion-icon name="person" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Username" class="field"></ion-input>
-			  </ion-row>
-
-		      <ion-row class="field-warp">
-			        <ion-label><ion-icon name="mail" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Email" class="field"></ion-input>
+			        <ion-input ngModel name="first_name" placeholder="First Name" class="field"></ion-input>
 			  </ion-row>
 
 			  <ion-row class="field-warp">
-			        <ion-label><ion-icon name="pin" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Address" class="field"></ion-input>
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="middle_name" placeholder="Middle Name" class="field"></ion-input>
 			  </ion-row>
 
 			  <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="last_name" placeholder="Last Name" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp with-margin-top">
 			  	<ion-label class="text-label">Birthday</ion-label>
 			  </ion-row>
 
 			  <ion-row class="field-warp">
 			  	<ion-label><ion-icon name="calendar" class="icon calendar"></ion-icon></ion-label>
 			  	<ion-col>
-			        <ion-datetime placeholder="Month" display-format="MMMM" class="field"></ion-datetime>
+			        <ion-datetime ngModel name="birthmonth" placeholder="Month" display-format="MMMM" class="field"></ion-datetime>
 			  	</ion-col>
 			    <ion-col>
-			        <ion-datetime placeholder="Day" display-format="DD" class="field"></ion-datetime>
+			        <ion-datetime ngModel name="birthday" placeholder="Day" display-format="DD" class="field"></ion-datetime>
 			  	</ion-col>    
 			  	<ion-col>
-			        <ion-datetime placeholder="Year" display-format="YYYY" class="field"></ion-datetime>
+			        <ion-datetime ngModel name="birthyear" placeholder="Year" display-format="YYYY" class="field"></ion-datetime>
 			  	</ion-col> 
 			  </ion-row>
 
 			  <ion-row class="field-warp">
 			        <ion-label><ion-icon name="phone-portrait" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Phone Number" class="field"></ion-input>
+			        <ion-input ngModel name="phone_number" placeholder="Phone Number" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp with-margin-top">
+			        <ion-label><ion-icon name="pin" class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="street" placeholder="Street" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="city" placeholder="City" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="province" placeholder="Province" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="country" placeholder="Country" class="field"></ion-input>
+			  </ion-row>
+
+			  <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-input ngModel name="zip" placeholder="Zip" class="field"></ion-input>
+			  </ion-row>
+
+			  
+
+			  <ion-row class="field-warp with-margin-top">
+			        <ion-label><ion-icon name="mail" class="icon"></ion-icon></ion-label>
+			        <ion-input type="email" ngModel name="email" placeholder="Email" class="field"></ion-input>
 			  </ion-row>
 			      
 			  <ion-row class="field-warp">
 			        <ion-label><ion-icon name="lock" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Password" type="password" class="field"></ion-input>  
+			        <ion-input  ngModel name="password" placeholder="Password" type="password" class="field"></ion-input>  
 		      </ion-row>
 
 		      <ion-row class="field-warp">
 			        <ion-label><ion-icon name="lock" class="icon"></ion-icon></ion-label>
-			        <ion-input placeholder="Confirm Password" type="password" class="field"></ion-input>  
+			        <ion-input  ngModel name="password_confirm" placeholder="Confirm Password" type="password" class="field"></ion-input>  
 		      </ion-row>
 		  </div>    
 	      
 	      <ion-row>
 	        <ion-col class="signup-col">
-	          <button class="btn btn-login" routerLink="/tabs/service" routerDirection="root">SUBMIT</button>
-	          <!-- <button class="btn btn-signup">BACK</button> -->
+	          <button class="btn btn-login">SUBMIT</button>
+	          <button class="btn btn-signup" routerLink="/login" routerDirection="root" >BACK</button>
 	        </ion-col>
 	      </ion-row>
 	      

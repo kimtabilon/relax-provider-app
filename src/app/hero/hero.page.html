@@ -1,0 +1,58 @@
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="body">
+    <ion-row>
+      <ion-col col-6><img src="../../assets/img/header-logo.png" class="logo"></ion-col>
+      <ion-col col-6><button class="signout-btn" (click)="logout()">Signout</button></ion-col>
+    </ion-row>
+    <ion-row class="user">
+      <ion-col col-12>
+        <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
+        <span class="label">Welcome Back</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
+      </ion-col>
+    </ion-row>
+
+    <span class="service-label" (click)="tapBack()">
+      <ion-icon slot="start" name="arrow-back"></ion-icon> {{title}}
+    </span>
+  </div>  
+
+  <ion-list lines="none">
+    <ion-row padding class="form-header"><ion-col class="text-center">Select Provider</ion-col></ion-row>
+    <ion-row padding class="form-bar">
+    	<ul class="progress">
+  	  <li class="progress__circle progress--active progress--done"></li>
+  	  <li class="progress__bar progress--done"></li>
+  	  <li class="progress__circle progress--active progress--done"></li>
+  	  <li class="progress__bar"></li>
+  	  <li class="progress__circle"></li>
+  	</ul>
+
+    </ion-row>
+
+    <div *ngFor="let hero of heroes">
+      <ion-row padding class="hero-wrap" (click)="tapHero(hero)">
+    	  <span class="hero-name">{{hero.profile.first_name}} {{hero.profile.last_name}}</span><span class="service-amount">$500</span>
+      </ion-row>
+      <ion-row padding class="star-wrap">
+      	<ion-icon name="star"></ion-icon>
+      	<ion-icon name="star"></ion-icon>
+      	<ion-icon name="star"></ion-icon>
+      	<ion-icon name="star"></ion-icon>
+      	<ion-icon name="star-half"></ion-icon> 105 Rating
+      </ion-row>
+      <ion-row padding class="location-wrap" *ngFor="let address of hero.profile.addresses">
+      	<ion-icon name="car"></ion-icon> 5.39 mi <ion-icon name="pin"></ion-icon> {{address.street}}, {{address.city}}, {{address.province}}, {{address.country}} {{address.zip}}
+      </ion-row>
+    </div>  
+  </ion-list>
+</ion-content>

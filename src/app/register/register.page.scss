@@ -1,38 +1,46 @@
 :host {
+  $brown: #64492e;
+  $lbrown: #c0976b;
+  $dark-blue: #101622;
+  $bg-blue: #141c2f;
+  $gradient-blue: #233951;
+  $menu-blue: #101622;
+  $item-blue: #314e70;
+  $blue: #2d4b67;
+  $gold: #d9a978;
+
   ion-content {
   	.body {
-  		// --background: url('https://images.pexels.com/photos/1432942/pexels-photo-1432942.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') no-repeat 100% 100%;
-	  	min-height:100%;
-		background:linear-gradient(0deg,rgba(199,44,60,.8),rgba(199,44,60,.9)),url('../../assets/img/bg-img-sm.png');
-		background-size:cover;
-		width: 100%;
-		// --background: url('../../assets/img/bg-img-sm.png') no-repeat 100% 100%;
+    	min-height:100%;
+  		background:linear-gradient(0deg,rgba(20,28,47,.8),rgba(20,28,47,.9)),url('../../assets/img/bg-img-sm.png');
+  		background-size:cover;
+  		width: 100%;
   	}
 
   	.btn {
-  		border-radius: 40px;
-  		display: block;
-  		width: 70%;
-  		margin: 5px auto;
-  		padding: 7px;
-  		font-size: 10pt;
-  	}
+      border-radius: 40px;
+      display: block;
+      width: 90%;
+      margin: 5px auto;
+      padding: 10px;
+      font-size: 12pt;
+    }
 
-  	.btn-login {
-  		border: 2px solid #F4AC4A;
-  		background: #F4AC4A;
-  		color: #333;
-  	}
+    .btn-login {
+      border: 2px solid $gold;
+      background: $gold;
+      color: $brown;
+    }
 
   	.btn-signup {
-  		background: none;
-  		border: 2px solid #F4AC4A;
-  		color: #eee;
-  	}
+      background: none;
+      border: 2px solid $gold;
+      color: #eee;
+    }
 
   	.form-field {
   		padding: 0 20px;
-  		color: #F4AC4A;
+  		color: $gold;
   		margin-bottom: 20px;
 
   		.icon {
@@ -45,37 +53,42 @@
 
       .text-label {
         font-size: 8pt;
-        color: #F4AC4A;
+        color: $gold;
         margin-bottom: -12px;
         margin-top: 10px;
       }
 
   		.field {
-  			border-bottom: 1px solid #F4AC4A;
+        color: $gold;
+  			border-bottom: 1px solid $gold;
   		}
   	}
+
+    .with-margin-top {
+      margin-top: 20px;
+    }
 	    
 	.login {
-		.logo-wrap {
-			text-align: center;
+    .logo-wrap {
+      text-align: center;
 
-			.logo {
-				margin-top: 10px;
-				width: 100px;
-			}
+      .logo {
+        margin-top: 20px;
+        width: 140px;
+      }
 
-			.label {
-				padding: 3px 30px;
-				border-radius: 10px;
-				background: #A32729;
-				color: #fff;
-				font-size: 10pt;
-				margin-top: 20px;
-				margin-bottom: 20px;
-			}
-		}
-			
-	} 
+      .label {
+        padding: 4px 30px;
+        border-radius: 10px;
+        background: $dark-blue;
+        color: $gold;
+        font-size: 12pt;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    }
+      
+  }
 
   }
 

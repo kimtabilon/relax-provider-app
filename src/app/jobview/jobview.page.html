@@ -1,0 +1,63 @@
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="body">
+    <ion-row class="text-center">
+      <ion-col>
+        <img src="../../assets/img/header-logo.png" class="logo">
+        <button class="signout-btn" (click)="logout()">Signout</button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="user">
+      <ion-col col-12>
+        <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
+        <span class="label">Welcome Back</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
+      </ion-col>
+    </ion-row>
+
+    <span class="service-label" (click)="tapBack()">
+      <ion-icon slot="start" name="arrow-back"></ion-icon> {{title}}
+    </span>
+  </div>  
+  
+  <ion-list lines="none">
+    <!-- <ion-row padding class="form-bar">
+      <ul class="progress">
+        <li class="progress__circle progress--active progress--done"></li>
+        <li class="progress__bar"></li>
+        <li class="progress__circle"></li>
+        <li class="progress__bar"></li>
+        <li class="progress__circle"></li>
+      </ul>
+    </ion-row> -->
+    <ion-row></ion-row>
+    <div *ngFor="let a of attributes">
+      <ion-row padding class="form-header"><ion-col class="text-center">{{a.title}}</ion-col></ion-row>
+      <ion-row padding class="field-wrap" *ngFor="let field of a.fields">
+      	<span class="field-text">{{field.label}}</span>
+        <ion-input *ngIf="field.type == 'text'" class="field" [(ngModel)]="field.input" placeholder="{{field.label}}"></ion-input>
+        <ion-datetime *ngIf="field.type == 'date'" [(ngModel)]="field.input" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="{{field.label}}" class="field-date"></ion-datetime>
+        <ion-datetime *ngIf="field.type == 'time'" [(ngModel)]="field.input" display-format="hh:mm a" picker-format="hh:mm a" placeholder="{{field.label}}" class="field-date"></ion-datetime>
+        <ion-textarea *ngIf="field.type == 'textarea'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" ></ion-textarea>
+        <ion-select *ngIf="field.type == 'dropdown'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" >
+          <ion-select-option *ngFor="let select of field.values" value="{{select}}">{{select}}</ion-select-option>
+        </ion-select>
+
+        <ion-label class="field-label"><ion-icon name="{{field.icon}}" class="field-icon"></ion-icon></ion-label>
+      </ion-row>
+    </div>
+
+    <button *ngIf="status == 'For Confirmation'" class="btn btn-login" (click)="tapConfirm()" >CONFIRM</button>
+    <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
+
+  </ion-list>
+    
+</ion-content>

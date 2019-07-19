@@ -1,7 +1,17 @@
 
 :host {
+	$brown: #64492e;
+	$lbrown: #c0976b;
+	$dark-blue: #101622;
+	$bg-blue: #141c2f;
+	$gradient-blue: #233951;
+	$menu-blue: #101622;
+	$item-blue: #314e70;
+	$blue: #2d4b67;
+	$gold: #d9a978;
+
 	.circle {
-		background: rgb(239,71,58);
+		background: $gold;
 		height: 20px;
 		border-bottom-left-radius: 50%;
   		border-bottom-right-radius: 50%;
@@ -17,21 +27,25 @@
 		// z-index: 1 !important;
 
 		.home-tab {
-			z-index: 400 !important;
+			// z-index: 400 !important;
 		}
 		
 		ion-tab-button {
-			background: #B8292D;
+			background: $menu-blue;
 			// z-index: 1 !important;
 
 			ion-icon {
-				color: #F54B3E;
+				color: $item-blue;
+			}
+
+			ion-label {
+				color: $item-blue;
 			}
 
 			.home-btn {
-				color: #AF7933;
-				background: #F2AA49;
-				border: 4px solid #B8292D;
+				color: $brown;
+				background: $gold;
+				border: 4px solid $gold;
 				// font-size: 21pt;
 				border-radius: 50%;
 				padding: 5px;

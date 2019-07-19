@@ -1,60 +1,30 @@
 
 <ion-content>
   <div class="body">
-    <ion-row>
-      <ion-col col-6><img src="../../assets/img/header-logo.png" class="logo"></ion-col>
-      <ion-col col-6><button class="signout-btn" routerLink="/login" routerDirection="root">Signout</button></ion-col>
+    <ion-row class="text-center">
+      <ion-col>
+        <img src="../../assets/img/header-logo.png" class="logo">
+        <button class="signout-btn" (click)="logout()">Signout</button>
+      </ion-col>
     </ion-row>
     <ion-row class="user">
       <ion-col col-12>
         <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
         <span class="label">Welcome Back</span><br>
-        <span class="name">Jason</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
       </ion-col>
     </ion-row>
 
-    <span class="service-label">
-      Car Services
+    <span class="service-label" (click)="tapBack()">
+      <ion-icon slot="start" name="arrow-back"></ion-icon> {{title}}
     </span>
   </div>  
     <ion-list lines="none">
-      <ion-item routerLink="/tabs/form" routerDirection="root" detail="false">
-        <ion-icon slot="start" name="battery-dead" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Battery Replacement</strong><br><span class="info">Same day professional service</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
+      <ion-item *ngFor="let option of options" (click)="tapOption(option)" detail="false">
+        <ion-icon slot="start" name="{{option.icon}}" class="with-border"></ion-icon>
+        <ion-label text-wrap><strong>{{option.name}}</strong><br><span class="info">{{option.description}}</span></ion-label>
+        <ion-icon *ngIf="option.form !== null" slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
       </ion-item> 
-      <ion-item detail="false">
-        <ion-icon slot="start" name="aperture" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Break Service</strong><br><span class="info">Every household needs</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item href="" detail="false">
-        <ion-icon slot="start" name="barcode" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Engine</strong><br><span class="info">Deliver in front of the door</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item href="" detail="false">
-        <ion-icon slot="start" name="bug" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Exhaust</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item href="" detail="false">
-        <ion-icon slot="start" name="bonfire" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>AC / Heating</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-
-      <ion-item href="" detail="false">
-        <ion-icon slot="start" name="clock" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Steering & Suspension</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-
-      <ion-item href="" detail="false">
-        <ion-icon slot="start" name="build" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Maintenance Service</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
     </ion-list>
   
 </ion-content>

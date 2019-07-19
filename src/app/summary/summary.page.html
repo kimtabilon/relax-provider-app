@@ -1,0 +1,79 @@
+
+<ion-content>
+  <div class="body">
+    <ion-row>
+      <ion-col col-6><img src="../../assets/img/header-logo.png" class="logo"></ion-col>
+      <ion-col col-6><button class="signout-btn" (click)="logout()">Signout</button></ion-col>
+    </ion-row>
+    <ion-row class="user">
+      <ion-col col-12>
+        <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
+        <span class="label">Welcome Back</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
+      </ion-col>
+    </ion-row>
+
+    <span class="service-label">
+      Car Service
+    </span>
+    <span class="service-label">
+      Battery Replacement
+    </span>
+  </div>  
+
+  <ion-row padding class="form-header"><ion-col class="text-center">Summary</ion-col></ion-row>
+  <ion-row padding class="form-bar">
+  	<ul class="progress">
+	  <li class="progress__circle progress--active progress--done"></li>
+	  <li class="progress__bar progress--done"></li>
+	  <li class="progress__circle progress--active progress--done"></li>
+	  <li class="progress__bar progress--done"></li>
+	  <li class="progress__circle progress--active progress--done"></li>
+	</ul>
+
+  </ion-row>
+  <ion-row padding>
+	  <ion-grid>
+	  	
+	  <ion-row>
+	    <span class="label">Service Type </span>
+	    <span class="value">Battery Replacement</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Service Amount </span>
+	    <span class="value">$ 506</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Service Person </span>
+	    <span class="value">Jayson Parra</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Service Address </span>
+	    <span class="value">Makati, PH</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Service Date/Time </span>
+	    <span class="value">June 25, 2019 10:00 am</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Service Provider </span>
+	    <span class="value">Bumble Bee Car Service</span>
+	  </ion-row>
+
+	  <ion-row>
+	    <span class="label">Provider Address </span>
+	    <span class="value">Quezon City</span>
+	  </ion-row>
+	</ion-grid>
+</ion-row>
+
+  
+
+  <button class="btn btn-login" routerLink="/tabs/service" routerDirection="root" >DONE</button>
+    
+</ion-content>

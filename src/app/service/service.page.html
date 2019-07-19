@@ -1,47 +1,38 @@
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="body">
-    <ion-row>
-      <ion-col col-6><img src="../../assets/img/header-logo.png" class="logo"></ion-col>
-      <ion-col col-6><button class="signout-btn" routerLink="/login" routerDirection="root">Signout</button></ion-col>
+    <ion-row class="text-center">
+      <ion-col>
+        <img src="../../assets/img/header-logo.png" class="logo">
+        <button class="signout-btn" (click)="logout()">Signout</button>
+      </ion-col>
     </ion-row>
     <ion-row class="user">
       <ion-col col-12>
         <img class="img" src="https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg"><br>
         <span class="label">Welcome Back</span><br>
-        <span class="name">Jason</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
       </ion-col>
     </ion-row>
 
-    <span class="service-label">
-      Services
+    <span class="service-label" (click)="tapBack()">
+      <ion-icon slot="start" name="arrow-back"></ion-icon> {{title}}
     </span>
-  </div>    
+  </div>  
     <ion-list lines="none">
-      <ion-item routerLink="/tabs/option" routerDirection="root" detail="false">
-        <ion-icon slot="start" name="car" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Car Services</strong><br><span class="info">Same day professional service</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
+      <ion-item *ngFor="let service of services" (click)="tapService(service)" detail="false">
+        <ion-icon slot="start" name="{{service.icon}}" class="with-border"></ion-icon>
+        <ion-label text-wrap><strong>{{service.name}}</strong><br><span class="info">{{service.description}}</span></ion-label>
+        <ion-icon slot="end" name="add-circle" class="arrow"></ion-icon>
       </ion-item> 
-      <ion-item href="#" detail="false">
-        <ion-icon slot="start" name="home" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>In house Services</strong><br><span class="info">Every household needs</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-icon slot="start" name="cart" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Grocery & Food</strong><br><span class="info">Deliver in front of the door</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-icon slot="start" name="cellular" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Internet Service Provider</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-icon slot="start" name="contacts" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>Contractor</strong></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>
     </ion-list>
+  
 </ion-content>
