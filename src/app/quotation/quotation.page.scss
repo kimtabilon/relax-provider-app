@@ -76,6 +76,14 @@
 		--background: $dark-blue;	
 	}
 
+	ion-refresher {
+		background: #fff;
+	}
+
+	ion-refresher-content {
+		color: #fff;
+	}
+
 	.service-label {
 		margin-left: 10px;
 		border-radius: 0 20px 0 0;

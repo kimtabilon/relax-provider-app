@@ -17,8 +17,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class FormPage implements OnInit {
 
-  user: User;  
-  profile: Profile;	
+  user:any = {
+    email: '',
+    password: '',
+    status: ''
+  };  
+  profile:any = {
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    birthday: '',
+    gender: '',
+    photo: ''
+  };  
+  photo:any = '';	
   service:any;
   serviceExist:any = false;
   pay_type:any = '';
@@ -54,6 +66,11 @@ export class FormPage implements OnInit {
       this.user = val.data;
       this.profile = val.data.profile;
       this.heroService.hero_id = this.user.id;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
@@ -82,6 +99,11 @@ export class FormPage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
       this.heroService.hero_id = this.user.id;
     });
 

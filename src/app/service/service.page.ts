@@ -8,6 +8,7 @@ import { LoadingService } from 'src/app/services/loading.service';
 import { GetService } from 'src/app/services/get.service';
 import { Storage } from '@ionic/storage';
 import { Router, ActivatedRoute } from '@angular/router';
+import { EnvService } from 'src/app/services/env.service';
 
 @Component({
   selector: 'app-service',
@@ -16,8 +17,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class ServicePage implements OnInit {
 
-  user: User;  
-  profile: Profile;	
+  user:any = {
+    email: '',
+    password: '',
+    status: ''
+  };  
+  profile:any = {
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    birthday: '',
+    gender: '',
+    photo: ''
+  };  
+  photo:any = '';
   services:any;
   title:any;
 
@@ -30,6 +43,7 @@ export class ServicePage implements OnInit {
     public loading: LoadingService,
     public getService: GetService,
     public router : Router,
+    private env: EnvService,
     public activatedRoute : ActivatedRoute
   ) {
   	this.menu.enable(true);	
@@ -44,6 +58,11 @@ export class ServicePage implements OnInit {
       // console.log(val.data);
       this.user = val.data;
       this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
@@ -62,6 +81,11 @@ export class ServicePage implements OnInit {
       // console.log(val.data);
       this.user = val.data;
       this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{

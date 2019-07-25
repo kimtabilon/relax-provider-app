@@ -7,6 +7,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { Storage } from '@ionic/storage';
 import { LoadingService } from 'src/app/services/loading.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { EnvService } from 'src/app/services/env.service';
 
 @Component({
   selector: 'app-option',
@@ -14,8 +15,20 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./option.page.scss'],
 })
 export class OptionPage implements OnInit {
-  user: User;  
-  profile: Profile;	
+  user:any = {
+    email: '',
+    password: '',
+    status: ''
+  };  
+  profile:any = {
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    birthday: '',
+    gender: '',
+    photo: ''
+  };  
+  photo:any = '';
   options:any;
   title:any;
   backTitle:any;
@@ -30,6 +43,7 @@ export class OptionPage implements OnInit {
     private alertService: AlertService,
     public loading: LoadingService,
     public router : Router,
+    private env: EnvService,
     public activatedRoute : ActivatedRoute
   ) {
   	this.menu.enable(true);	
@@ -42,6 +56,11 @@ export class OptionPage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
@@ -62,6 +81,11 @@ export class OptionPage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{

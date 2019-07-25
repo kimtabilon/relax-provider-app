@@ -1,9 +1,35 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>help</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="body">
+    <ion-row class="text-center">
+      <ion-col>
+        <img src="../../assets/img/header-logo.png" class="logo">
+        <button class="signout-btn" (click)="logout()">Signout</button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="user">
+      <ion-col>
+        <img class="img" src="{{photo}}"><br>
+        <span class="label">Welcome Back</span><br>
+        <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
+      </ion-col>
+    </ion-row>
 
+    <span class="service-label">
+      Help
+    </span>
+  </div>  
+
+    <ion-list lines="none">
+      <h4>Hero Provider App</h4><br>
+      Copyright @ 2019. iWeb IT Solutions
+    </ion-list>
 </ion-content>

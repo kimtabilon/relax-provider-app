@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
         data => {
           // console.log(data);
           this.loading.dismiss();
-          this.storage.set('hero', data)
+          this.storage.set('hero', data);
 
           this.alertService.presentToast("Logged In");
         },

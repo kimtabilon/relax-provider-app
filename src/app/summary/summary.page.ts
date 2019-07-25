@@ -12,8 +12,20 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./summary.page.scss'],
 })
 export class SummaryPage implements OnInit {
-  user: User;  
-  profile: Profile;	
+  user:any = {
+    email: '',
+    password: '',
+    status: ''
+  };  
+  profile:any = {
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    birthday: '',
+    gender: '',
+    photo: ''
+  };  
+  photo:any = 'https://www.fakepersongenerator.com/Face/male/male1085206437439.jpg';
   
   constructor(
   	private menu: MenuController, 

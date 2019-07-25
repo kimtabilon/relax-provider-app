@@ -19,8 +19,20 @@ import { EnvService } from 'src/app/services/env.service';
 })
 export class CategoryPage implements OnInit {
 
-  user: User;  
-  profile: Profile;	
+  user:any = {
+    email: '',
+    password: '',
+    status: ''
+  };  
+  profile:any = {
+    first_name: '',
+    middle_name: '',
+    last_name: '',
+    birthday: '',
+    gender: '',
+    photo: ''
+  };  
+  photo:any = '';
   categories:any;
   app:any;
   myServices:any;
@@ -50,7 +62,12 @@ export class CategoryPage implements OnInit {
 
     this.storage.get('hero').then((val) => {
       this.user = val.data;
-      this.profile = val.data.profile;   
+      this.profile = val.data.profile;
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      } 
     });
 
     this.storage.get('app').then((val) => {
@@ -75,7 +92,12 @@ export class CategoryPage implements OnInit {
 
     this.storage.get('hero').then((val) => {
       this.user = val.data;
-      this.profile = val.data.profile;   
+      this.profile = val.data.profile;  
+      if(this.profile.photo!==null) {
+        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      } else {
+        this.photo = this.env.DEFAULT_IMG;
+      }
     });
 
   	this.storage.get('app').then((val) => {
