@@ -33,9 +33,10 @@ export class HomePage implements OnInit {
     photo: ''
   };  
   photo:any = '';
-  categories:any;
-  app:any;
-  myServices:any;
+  categories:any = [];
+  app:any = [];
+  myServices:any = [];
+  title:any = 'Please wait...';
 
   constructor(
     private http: HttpClient,
@@ -58,32 +59,7 @@ export class HomePage implements OnInit {
   }
 
   doRefresh(event) {
-    this.authService.validateApp();
-
-    this.http.post(this.env.HERO_API + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });
-    this.http.post(this.env.API_URL + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });  
-
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;  
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-
-      /*Get My Services*/
-      this.http.post(this.env.HERO_API + 'hero/services',{id: this.user.id})
-        .subscribe(data => {
-            this.myServices = data;
-            this.myServices = this.myServices.data.services;
-        },error => { });
-
-      this.storage.get('app').then((val) => {
-        this.app = val.data;
-      }); 
-    });
-
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -109,13 +85,14 @@ export class HomePage implements OnInit {
       /*Get My Services*/
       this.http.post(this.env.HERO_API + 'hero/services',{id: this.user.id})
         .subscribe(data => {
-            this.myServices = data;
-            this.myServices = this.myServices.data.services;
+            let response:any = data;
+            this.myServices = response.data.services;
         },error => { });
 
       this.storage.get('app').then((val) => {
         this.app = val.data;
       }); 
+      this.title = 'My Services';
     });
 
     this.loading.dismiss();

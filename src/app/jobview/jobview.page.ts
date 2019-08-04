@@ -31,10 +31,15 @@ export class JobviewPage implements OnInit {
     photo: ''
   };  
   photo:any = '';
-  job:any;
-  attributes:any;
+  job:any = [];
+  attributes:any = [];
+  form:any = [];
   status:any = '';
-  title:any = 'My Job';
+  title:any = 'Please wait...';
+  customer_info:any = [];
+  formExist:any = false;
+  hero:any = [];
+  heroExist:any = false;
 
   constructor(
   	private menu: MenuController, 
@@ -55,28 +60,7 @@ export class JobviewPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-    });
-
-    this.activatedRoute.queryParams.subscribe((res)=>{
-      this.job = JSON.parse(res.job);
-      this.attributes = JSON.parse(this.job.form_value);
-
-      this.status = this.job.status;
-
-      if(this.job.status == 'For Confirmation') {
-        this.title = 'Confirm Job';
-      } else {
-        this.title = 'Job Info';
-      }
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -95,16 +79,37 @@ export class JobviewPage implements OnInit {
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
-      this.job = JSON.parse(res.job);
-      this.attributes = JSON.parse(this.job.form_value);
+      let job_id:any = res.job_id;
+      this.http.post(this.env.HERO_API + 'jobs/byID',{id: job_id})
+        .subscribe(data => {
+            let response:any = data;
+            this.job = response.data;
+            this.attributes = JSON.parse(this.job.form_value);
+            this.customer_info = JSON.parse(this.job.customer_info);
+            this.status = this.job.status;
 
-      this.status = this.job.status;
+            if(this.job.form !== null) {
+              this.form = this.job.form;
+              this.formExist = true;
+            }else{
+              this.formExist = false;
+            }
 
-      if(this.job.status == 'For Confirmation') {
-      	this.title = 'Confirm Job';
-      } else {
-      	this.title = 'Job Info';
-      }
+            if(this.job.hero !== null) {
+              this.hero = this.job.hero;
+              this.heroExist = true;
+            } else {
+              this.heroExist = false;
+            }
+
+            if(this.job.status == 'For Confirmation') {
+              this.title = 'Confirm Job';
+            } else {
+              this.title = 'Job Info';
+            }
+        },error => { this.title = 'Back'; });
+
+          
     });
 
     this.loading.dismiss();

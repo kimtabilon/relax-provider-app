@@ -24,7 +24,7 @@
     </ion-row>
 
     <span class="service-label">
-      My Services
+      {{title}}
     </span>
     <span>
       <ion-icon name="add" class="add-btn"  routerLink="/tabs/category" routerDirection="root"></ion-icon>
@@ -32,6 +32,7 @@
   </div>  
 
     <ion-list lines="none">
+      <ion-item *ngIf="myServices.length==0">No Services Found</ion-item>
       <ion-item *ngFor="let service of myServices" (click)="tapService(service)" detail="false">
         <ion-icon slot="start" name="{{service.icon}}" class="with-border"></ion-icon>
         <ion-label text-wrap><strong>{{service.name}}</strong><br>

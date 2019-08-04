@@ -33,9 +33,10 @@ export class InboxPage implements OnInit {
     photo: ''
   };  
   photo:any = '';
-  categories:any;
-  app:any;
-  jobs:any;
+  categories:any = [];
+  app:any = [];
+  jobs:any = [];
+  title:any = 'Please wait...';
 
   constructor(
     private http: HttpClient,
@@ -58,29 +59,7 @@ export class InboxPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.authService.validateApp();
-
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile; 
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-
-      /*Get My Jobs*/
-      this.http.post(this.env.HERO_API + 'jobs/forquotation',{id: this.user.id})
-        .subscribe(data => {
-            this.jobs = data;
-            this.jobs = this.jobs.data;
-        },error => { console.log(error); });
-
-
-      this.storage.get('app').then((val) => {
-        this.app = val.data;
-      }); 
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -103,16 +82,17 @@ export class InboxPage implements OnInit {
       /*Get My Jobs*/
       this.http.post(this.env.HERO_API + 'jobs/forquotation',{id: this.user.id})
         .subscribe(data => {
-            this.jobs = data;
-            this.jobs = this.jobs.data;
-        },error => { console.log(error); });
+            let response:any = data;
+            this.jobs = response.data;
+            this.title = 'My Inbox';
+        },error => { console.log(error); this.title = 'My Inbox'; });
 
 
       this.storage.get('app').then((val) => {
         this.app = val.data;
       }); 
     });
-
+    
     this.loading.dismiss();
   }
 
@@ -123,7 +103,7 @@ export class InboxPage implements OnInit {
     	case "For Quotation":
     		this.router.navigate(['/tabs/quotation'],{
 		        queryParams: {
-		            job : JSON.stringify(job)
+		            job_id : job.id
 		        },
 		      });
     		break;
@@ -131,7 +111,7 @@ export class InboxPage implements OnInit {
       case "For Confirmation":
         this.router.navigate(['/tabs/jobview'],{
             queryParams: {
-                job : JSON.stringify(job)
+                job_id : job.id
             },
           });
         
@@ -140,11 +120,6 @@ export class InboxPage implements OnInit {
     	default:
     		break;
     }
-    
-    // if(job.status) {
-    // } else {
-    //   this.alertService.presentToast("Service not active");
-    // }
 
     this.loading.dismiss();
       

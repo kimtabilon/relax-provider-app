@@ -33,9 +33,9 @@ export class CategoryPage implements OnInit {
     photo: ''
   };  
   photo:any = '';
-  categories:any;
-  app:any;
-  myServices:any;
+  categories:any = [];
+  app:any = [];
+  title:any = 'Please wait...';
 
   constructor(
     private http: HttpClient,
@@ -58,28 +58,7 @@ export class CategoryPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.authService.validateApp();
-
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      } 
-    });
-
-    this.storage.get('app').then((val) => {
-      this.app = val.data;
-    }); 
-
-    /*Get All Services*/
-    this.http.post(this.env.HERO_API + 'categories/onlyservice',{key: this.env.APP_ID})
-      .subscribe(data => {
-          this.categories = data;
-          this.categories = this.categories.data;
-      },error => { }); 
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -107,10 +86,11 @@ export class CategoryPage implements OnInit {
     /*Get All Services*/
   	this.http.post(this.env.HERO_API + 'categories/onlyservice',{key: this.env.APP_ID})
   	  .subscribe(data => {
-  	      this.categories = data;
-  	      this.categories = this.categories.data;
-  	  },error => { }); 
-
+  	      let response:any = data;
+  	      this.categories = response.data;
+          this.title = 'Add Service'; 
+  	  },error => { this.title = 'Add Service'; }); 
+     
     this.loading.dismiss();
   }
 
@@ -127,6 +107,14 @@ export class CategoryPage implements OnInit {
     }
     this.loading.dismiss();
       
+  }
+
+  tapBack() {
+    this.loading.present();
+    this.router.navigate(['/tabs/home'],{
+      queryParams: {},
+    });
+    this.loading.dismiss();
   }
 
   logout() {

@@ -51,21 +51,7 @@ export class HeroPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-    });
-
-    this.activatedRoute.queryParams.subscribe((res)=>{
-        this.title = res.title;
-        this.heroes = JSON.parse(res.heroes);
-        this.job_id = JSON.parse(res.job_id);
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);

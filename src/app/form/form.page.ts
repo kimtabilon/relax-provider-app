@@ -62,33 +62,7 @@ export class FormPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;
-      this.heroService.hero_id = this.user.id;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-    });
-
-    this.activatedRoute.queryParams.subscribe((res)=>{
-      this.service = JSON.parse(res.service);
-      this.heroService.service_id = this.service.id;
-      this.pay_type = this.service.pay_type;
-      this.title = this.service.name;
-      
-      if(this.service.pivot) {
-        this.heroService.pay_per = this.service.pivot.pay_per;
-        this.heroService.id = this.service.pivot.id;
-        this.serviceExist = true;
-      } else {
-        this.heroService.id = '';
-        this.heroService.pay_per = '';
-        this.serviceExist = false;
-      }
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);

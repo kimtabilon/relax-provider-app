@@ -81,7 +81,8 @@
 		margin-left: 10px;
 		border-radius: 0 20px 0 0;
 		background: $gold;
-		padding: 5px 20px 5px 10px;
+		padding: 10px 15px 10px 10px;
+		line-height: 30px;
 		color: $brown;
 		font-size: 9pt;
 	}
@@ -91,8 +92,9 @@
 		background: $gold;
 		border-radius: 50px;
         border: 2px solid $gold;
-        margin-left: 3px;
-        margin-bottom: -2px;
+        margin-left: 8px;
+        margin-bottom: -7px;
+        font-size: 16pt;
 	}
 
 	.pull-right {
@@ -111,7 +113,7 @@
         --background: linear-gradient(to right, rgb(35,59,85) 0%,rgb(49,78,112) 100%);
         // --background: $gold;
         --border-radius: 50px 50px 10px 50px;
-        --color: $gold;
+        color: $gold;
         margin-bottom: 5px;
 
         ion-icon.arrow {

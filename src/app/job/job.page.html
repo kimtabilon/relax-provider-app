@@ -24,14 +24,15 @@
     </ion-row>
 
     <span class="service-label" (click)="tapMyJobs()" [ngClass]="jobpage ? 'active-tab' : ''">
-      My Jobs
+      {{myjobstitle}}
     </span>
     <span class="service-label" (click)="tapCompleted()" [ngClass]="jobpage ? '' : 'active-tab'">
-      Completed
+      {{completedtitle}}
     </span>
   </div>  
 
     <ion-list lines="none">
+      <ion-item *ngIf="jobs.length==0">No Job Found</ion-item>
       <ion-item *ngFor="let job of jobs" (click)="tapJob(job)" detail="false">
         <ion-icon slot="start" name="{{job.form.option.icon}}" class="with-border"></ion-icon>
         <ion-label text-wrap><strong>{{job.form.option.name}}</strong><br><span class="info">{{job.status}}</span></ion-label>

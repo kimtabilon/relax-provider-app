@@ -31,8 +31,8 @@ export class ServicePage implements OnInit {
     photo: ''
   };  
   photo:any = '';
-  services:any;
-  title:any;
+  services:any = [];
+  title:any = 'Please wait...';
 
   constructor(
   	private menu: MenuController, 
@@ -53,22 +53,7 @@ export class ServicePage implements OnInit {
   }
 
   doRefresh(event) {
-    this.authService.validateApp();
-    this.storage.get('hero').then((val) => {
-      // console.log(val.data);
-      this.user = val.data;
-      this.profile = val.data.profile;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-    });
-
-    this.activatedRoute.queryParams.subscribe((res)=>{
-        this.services = JSON.parse(res.value).services;
-        this.title = JSON.parse(res.value).name;
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -78,7 +63,6 @@ export class ServicePage implements OnInit {
     this.loading.present();
     this.authService.validateApp();
     this.storage.get('hero').then((val) => {
-      // console.log(val.data);
       this.user = val.data;
       this.profile = val.data.profile;
       if(this.profile.photo!==null) {

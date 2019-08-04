@@ -24,11 +24,12 @@
     </ion-row>
 
     <span class="service-label active-tab">
-      My Inbox
+      {{title}}
     </span>
   </div>  
 
     <ion-list lines="none">
+      <ion-item *ngIf="jobs.length==0">Empty Inbox</ion-item>
       <ion-item *ngFor="let job of jobs" (click)="tapJob(job)" detail="false">
         <ion-icon slot="start" name="{{job.form.option.icon}}" class="with-border"></ion-icon>
         <ion-label text-wrap><strong>{{job.form.option.name}}</strong><br><span class="info">{{job.status}}</span></ion-label>

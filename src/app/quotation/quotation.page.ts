@@ -31,8 +31,12 @@ export class QuotationPage implements OnInit {
     photo: ''
   };  
   photo:any = '';	
-  job:any;
-  attributes:any;
+  job:any = [];
+  attributes:any = [];
+  form:any = [];
+  formExist:any = false;
+  status:any = '';
+  customer_info:any = [];
   quote:any = {
     hero_id: '',
     job_id: '',
@@ -58,22 +62,7 @@ export class QuotationPage implements OnInit {
   }
 
   doRefresh(event) {
-    this.storage.get('hero').then((val) => {
-      this.user = val.data;
-      this.profile = val.data.profile;
-      if(this.profile.photo!==null) {
-        this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
-      } else {
-        this.photo = this.env.DEFAULT_IMG;
-      }
-      this.quote.hero_id = this.user.id;
-    });
-
-    this.activatedRoute.queryParams.subscribe((res)=>{
-      this.job = JSON.parse(res.job);
-      this.attributes = JSON.parse(this.job.form_value);
-      this.quote.job_id = this.job.id;
-    });
+    this.ionViewWillEnter();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -93,9 +82,25 @@ export class QuotationPage implements OnInit {
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
-      this.job = JSON.parse(res.job);
-      this.attributes = JSON.parse(this.job.form_value);
-      this.quote.job_id = this.job.id;
+      let job_id:any = res.job_id;
+      this.http.post(this.env.HERO_API + 'jobs/byID',{id: job_id})
+        .subscribe(data => {
+            let response:any = data;
+            this.job = response.data;
+            this.attributes = JSON.parse(this.job.form_value);
+            this.customer_info = JSON.parse(this.job.customer_info);
+            this.quote.job_id = this.job.id;
+
+            this.status = this.job.status;
+
+            if(this.job.form !== null) {
+              this.form = this.job.form;
+              this.formExist = true;
+            }else{
+              this.formExist = false;
+            }
+        },error => { console.log(error) });
+            
     });
 
     this.loading.dismiss();
