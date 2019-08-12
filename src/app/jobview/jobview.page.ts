@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -40,6 +40,7 @@ export class JobviewPage implements OnInit {
   formExist:any = false;
   hero:any = [];
   heroExist:any = false;
+  noti_id:any = '';
 
   constructor(
   	private menu: MenuController, 
@@ -51,7 +52,8 @@ export class JobviewPage implements OnInit {
     public activatedRoute : ActivatedRoute,
     public loading: LoadingService,
     private http: HttpClient,
-    private env: EnvService
+    private env: EnvService,
+    public alertCtrl: AlertController
   ) {
   	this.menu.enable(true);	
   }
@@ -80,6 +82,8 @@ export class JobviewPage implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((res)=>{
       let job_id:any = res.job_id;
+      this.noti_id = res.noti_id;
+
       this.http.post(this.env.HERO_API + 'jobs/byID',{id: job_id})
         .subscribe(data => {
             let response:any = data;
@@ -107,12 +111,11 @@ export class JobviewPage implements OnInit {
             } else {
               this.title = 'Job Info';
             }
-        },error => { this.title = 'Back'; });
+            this.loading.dismiss();
+        },error => { this.title = 'Back'; this.loading.dismiss(); });
 
           
     });
-
-    this.loading.dismiss();
 
   }
 
@@ -124,16 +127,74 @@ export class JobviewPage implements OnInit {
     this.loading.dismiss();  
   }
 
-  tapConfirm() {
-    this.loading.present();
+  async tapConfirm() {
 
-    /*Confirm Jobs*/
-    this.http.post(this.env.HERO_API + 'jobs/confirm',{id: this.job.id})
-      .subscribe(data => {
-      },error => { this.alertService.presentToast("Server not responding!");
-    },() => { this.navCtrl.navigateRoot('/tabs/job'); });  
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Confirm Job?',
+      buttons: [
+        {
+          text: 'Back',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }, {
+          text: 'Confirm',
+          handler: () => {
+            this.loading.present();
+            /*Confirm Jobs*/
+            this.http.post(this.env.HERO_API + 'jobs/confirm',{id: this.job.id, noti_id: this.noti_id})
+              .subscribe(data => {
+                this.loading.dismiss();
+              },error => { 
+                this.alertService.presentToast("Server not responding!");
+                this.loading.dismiss();
+                console.log(error);
+              },
+              () => { this.navCtrl.navigateRoot('/tabs/job'); }
+            );  
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
-    this.loading.dismiss();
+  async tapDeny() {
+
+    let alert = await this.alertCtrl.create({
+      header: '',
+      message: 'Deny Job?',
+      buttons: [
+        {
+          text: 'Back',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }, {
+          text: 'Deny',
+          handler: () => {
+            this.loading.present();
+            /*Confirm Jobs*/
+            this.http.post(this.env.HERO_API + 'jobs/deny',{id: this.job.id, noti_id: this.noti_id})
+              .subscribe(data => {
+                this.loading.dismiss();
+              },error => { 
+                console.log(error);
+                this.alertService.presentToast("Server not responding!");
+                this.loading.dismiss();
+              },
+              () => { this.navCtrl.navigateRoot('/tabs/job'); }
+            );  
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   tapDone() {

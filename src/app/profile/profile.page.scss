@@ -116,14 +116,14 @@
   .field {
 		background: $item-blue;
 		color: $gold;
-		border-radius: 5px 0 0 5px;
+		border-radius: 0 5px 5px 0;
 		width: 82%;
    		margin-top: 0px;
 	}
 	.field-label {
 		background: $gold;
 		width: 40px;
-		border-radius: 0 5px 5px 0;
+		border-radius: 5px 0 0 5px;
 	}
 
 	.field-wrap {
@@ -140,7 +140,7 @@
 		background: $item-blue;
 		width: 82%;
 		color: $gold;
-		border-radius: 5px 0 0 5px;
+		border-radius: 0 5px 5px 0;
 	}
 	.field-text {
 		color: $gold;

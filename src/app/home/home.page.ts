@@ -87,7 +87,8 @@ export class HomePage implements OnInit {
         .subscribe(data => {
             let response:any = data;
             this.myServices = response.data.services;
-        },error => { });
+            this.loading.dismiss();
+        },error => { this.loading.dismiss(); });
 
       this.storage.get('app').then((val) => {
         this.app = val.data;
@@ -95,7 +96,6 @@ export class HomePage implements OnInit {
       this.title = 'My Services';
     });
 
-    this.loading.dismiss();
   }
 
   tapService(service) {

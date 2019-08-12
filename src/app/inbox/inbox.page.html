@@ -29,11 +29,20 @@
   </div>  
 
     <ion-list lines="none">
-      <ion-item *ngIf="jobs.length==0">Empty Inbox</ion-item>
-      <ion-item *ngFor="let job of jobs" (click)="tapJob(job)" detail="false">
-        <ion-icon slot="start" name="{{job.form.option.icon}}" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>{{job.form.option.name}}</strong><br><span class="info">{{job.status}}</span></ion-label>
-        <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
-      </ion-item>  
+      <ion-item *ngIf="notifications.length==0">Empty Inbox</ion-item>
+
+      <div *ngFor="let noti of notifications">
+        <ion-item  (click)="tapNoti(noti)" detail="false" *ngIf="noti.seen != 'Yes'">
+          <ion-icon slot="start" name="{{noti.icon}}" class="with-border"></ion-icon>
+          
+          <ion-label text-wrap>
+            <strong class="noti-title">{{noti.type}}</strong><br>
+            <span class="info" [innerHTML]="noti.info"></span>
+          </ion-label>
+          
+          <ion-icon slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
+        </ion-item>  
+      </div>  
+
     </ion-list>
 </ion-content>

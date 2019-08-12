@@ -11,11 +11,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-loginreset',
+  templateUrl: './loginreset.page.html',
+  styleUrls: ['./loginreset.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginresetPage implements OnInit {
 
   hero:any;
 
@@ -34,30 +34,25 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  login(form: NgForm) {
+  reset(form: NgForm) {
     this.loading.present();
-    if(form.value.email != '' && form.value.password != '') 
-    {
-      this.authService.login(form.value.email, form.value.password).subscribe(
-        data => {
-          // console.log(data);
-          this.loading.dismiss();
-          this.storage.set('hero', data);
 
-          // this.alertService.presentToast("Logged In");
-        },
-        error => {
-          this.loading.dismiss();
-          this.alertService.presentToast("Wrong Email/Password or Inactive account");
-          // this.alertService.presentToast(error.message);
-        },
-        () => {
-          this.navCtrl.navigateRoot('/tabs/home');
-        }
-      );
+    if(form.value.name != '' && form.value.email != '') 
+    { 
+      console.log(form.value);	
+      this.http.post(this.env.HERO_API + 'hero/mail/resetpassword',{name: form.value.name, email: form.value.email})
+	    .subscribe(data => {
+	        let response:any = data;
+	        this.loading.dismiss();
+	        this.alertService.presentToast("Check your email for new password");
+	    },error => { 
+	    	this.loading.dismiss();
+	    	this.alertService.presentToast("Account not found.");
+	    	console.log(error); 
+	    });
     } else {
       this.loading.dismiss();
-      this.alertService.presentToast("Empty Email or Password");
+      this.alertService.presentToast("Required name and email");
     }
       
   }

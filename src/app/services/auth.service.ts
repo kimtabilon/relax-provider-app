@@ -50,7 +50,7 @@ export class AuthService {
         this.storage.set('token', token)
         .then(
           () => {
-            console.log('Token Stored');
+            // console.log('Token Stored');
           },
           error => console.error('Error storing item', error)
         );
@@ -71,7 +71,7 @@ export class AuthService {
   		last_name: String, 
   		 
   		street: String, 
-      	city: String, 
+      city: String, 
   		province: String, 
   		country: String, 
   		zip: String, 
@@ -79,6 +79,7 @@ export class AuthService {
   		birthmonth: String, 
   		birthday: String, 
   		birthyear: String, 
+      gender: String, 
   		
   		phone_number: String, 
 
@@ -101,6 +102,7 @@ export class AuthService {
       	birthmonth: birthmonth, 
       	birthday: birthday, 
       	birthyear: birthyear, 
+        gender: gender, 
       	phone_number: phone_number, 
 
       	email: email,

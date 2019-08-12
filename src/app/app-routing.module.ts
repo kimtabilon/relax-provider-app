@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'jobview', loadChildren: './jobview/jobview.module#JobviewPageModule' },
   { path: 'inbox', loadChildren: './inbox/inbox.module#InboxPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-  { path: 'help', loadChildren: './help/help.module#HelpPageModule' }
+  { path: 'help', loadChildren: './help/help.module#HelpPageModule' },
+  { path: 'loginreset', loadChildren: './loginreset/loginreset.module#LoginresetPageModule' }
 ];
 @NgModule({
   imports: [

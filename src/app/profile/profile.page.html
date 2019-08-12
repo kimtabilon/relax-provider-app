@@ -42,42 +42,41 @@
       <ion-row padding class="form-header"><ion-col class="text-center">My Profile</ion-col></ion-row>
       <ion-row padding class="field-wrap">
       	<span class="field-text">First Name</span>
-        <ion-input class="field" [(ngModel)]="profile.first_name" placeholder="First Name"></ion-input>
-
         <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="profile.first_name" placeholder="First Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Middle Name</span>
-        <ion-input class="field" [(ngModel)]="profile.middle_name" placeholder="Middle Name"></ion-input>
         <ion-label class="field-label"><ion-icon name="person-add" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="profile.middle_name" placeholder="Middle Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Last Name</span>
-        <ion-input class="field" [(ngModel)]="profile.last_name" placeholder="Last Name"></ion-input>
         <ion-label class="field-label"><ion-icon name="people" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="profile.last_name" placeholder="Last Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Gender</span>
+        <ion-label class="field-label"><ion-icon name="transgender" class="field-icon"></ion-icon></ion-label>
         <ion-select  [(ngModel)]="profile.gender" placeholder="Gender" class="field" >
           <ion-select-option value="Male">Male</ion-select-option>
           <ion-select-option value="Female">Female</ion-select-option>
         </ion-select>
-        <ion-label class="field-label"><ion-icon name="transgender" class="field-icon"></ion-icon></ion-label>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Birthday</span>
-        <ion-datetime [(ngModel)]="profile.birthday" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="Birthday" class="field-date"></ion-datetime>
         <ion-label class="field-label"><ion-icon name="calendar" class="field-icon"></ion-icon></ion-label>
+        <ion-datetime [(ngModel)]="profile.birthday" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="Birthday" class="field-date"></ion-datetime>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Photo</span>
-        <ion-input class="field" [(ngModel)]="profile.photo" placeholder="Photo"></ion-input>
         <ion-label class="field-label"><ion-icon name="image" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="profile.photo" placeholder="Photo"></ion-input>
       </ion-row>
 
       
@@ -115,33 +114,32 @@
       <ion-row padding class="form-header"><ion-col class="text-center">My Address</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Street</span>
-        <ion-input class="field" [(ngModel)]="address.street" placeholder="Street"></ion-input>
-
         <ion-label class="field-label"><ion-icon name="home" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="address.street" placeholder="Street"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">City</span>
-        <ion-input class="field" [(ngModel)]="address.city" placeholder="City"></ion-input>
         <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="address.city" placeholder="City"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Province</span>
-        <ion-input class="field" [(ngModel)]="address.province" placeholder="Province"></ion-input>
         <ion-label class="field-label"><ion-icon name="map" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="address.province" placeholder="Province"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Country</span>
-        <ion-input class="field" [(ngModel)]="address.country" placeholder="Country"></ion-input>
         <ion-label class="field-label"><ion-icon name="planet" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="address.country" placeholder="Country"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Zip</span>
-        <ion-input class="field" [(ngModel)]="address.zip" placeholder="Zip"></ion-input>
         <ion-label class="field-label"><ion-icon name="more" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="address.zip" placeholder="Zip"></ion-input>
       </ion-row>
       
     </div>
@@ -154,15 +152,14 @@
       <ion-row padding class="form-header"><ion-col class="text-center">My Contact</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Dial Code</span>
-        <ion-input class="field" [(ngModel)]="contact.dial_code" placeholder="Dial Code"></ion-input>
-
         <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="contact.dial_code" placeholder="Dial Code"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Number</span>
-        <ion-input class="field" [(ngModel)]="contact.number" placeholder="Number"></ion-input>
         <ion-label class="field-label"><ion-icon name="phone-portrait" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="contact.number" placeholder="Number"></ion-input>
       </ion-row>
       
     </div>

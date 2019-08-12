@@ -29,18 +29,9 @@
   </div>  
   
   <ion-list lines="none">
-    <!-- <ion-row padding class="form-bar">
-      <ul class="progress">
-        <li class="progress__circle progress--active progress--done"></li>
-        <li class="progress__bar"></li>
-        <li class="progress__circle"></li>
-        <li class="progress__bar"></li>
-        <li class="progress__circle"></li>
-      </ul>
-    </ion-row> -->
     <ion-row></ion-row>
     <ion-row padding class="field-wrap">
-      <ion-input class="field" [(ngModel)]="heroService.pay_per" placeholder="Pay per {{pay_type}}"></ion-input>
+      <ion-input  type="number" class="field" [(ngModel)]="heroService.pay_per" placeholder="Pay per {{pay_type}}"></ion-input>
       <ion-label class="field-label"><ion-icon name="add" class="field-icon"></ion-icon></ion-label>
     </ion-row>
 

@@ -40,7 +40,8 @@ export class QuotationPage implements OnInit {
   quote:any = {
     hero_id: '',
     job_id: '',
-    amount: '0'
+    amount: '0',
+    noti_id: '0'
   };
 
   constructor(
@@ -83,6 +84,7 @@ export class QuotationPage implements OnInit {
 
     this.activatedRoute.queryParams.subscribe((res)=>{
       let job_id:any = res.job_id;
+      this.quote.noti_id = res.noti_id;
       this.http.post(this.env.HERO_API + 'jobs/byID',{id: job_id})
         .subscribe(data => {
             let response:any = data;
@@ -99,11 +101,10 @@ export class QuotationPage implements OnInit {
             }else{
               this.formExist = false;
             }
-        },error => { console.log(error) });
+            this.loading.dismiss();
+        },error => { console.log(error); this.loading.dismiss(); });
             
     });
-
-    this.loading.dismiss();
 
   }
 
@@ -117,14 +118,24 @@ export class QuotationPage implements OnInit {
 
   tapNext() {
     this.loading.present();
+    console.log(this.quote);
+    if(this.quote.amount > 0) {
+      this.http.post(this.env.HERO_API + 'quotations/store',this.quote)
+        .subscribe(data => { 
+      },error => { 
+        this.loading.dismiss();
+        this.alertService.presentToast("Server not responding!"); 
+        console.log(error);
+      },() => { 
+        this.loading.dismiss();
+        this.navCtrl.navigateRoot('/tabs/inbox'); 
+      });
+      } else {
+        this.loading.dismiss();
+        this.alertService.presentToast("Input Quote Amount");
+      }
 
-    /*Save Hero Service*/
-    this.http.post(this.env.HERO_API + 'quotations/store',this.quote)
-      .subscribe(data => { 
-      },error => { this.alertService.presentToast("Server not responding!"); 
-      },() => { this.navCtrl.navigateRoot('/tabs/inbox'); });
-
-    this.loading.dismiss();
+      
   }
 
   logout() {

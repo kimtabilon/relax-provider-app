@@ -112,7 +112,6 @@ export class FormPage implements OnInit {
 
   tapNext() {
     this.loading.present();
-
     /*Save Hero Service*/
     this.http.post(this.env.HERO_API + 'hero_services/save',this.heroService)
       .subscribe(data => { this.heroService.pay_per = '';

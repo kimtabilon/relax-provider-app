@@ -61,11 +61,16 @@
   		.field {
         color: $gold;
   			border-bottom: 1px solid $gold;
+        width: 100%;
   		}
   	}
 
     .with-margin-top {
       margin-top: 20px;
+    }
+
+    .with-margin-bottom {
+      margin-bottom: 10px;
     }
 	    
 	.login {

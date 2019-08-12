@@ -135,9 +135,8 @@ export class ProfilePage implements OnInit {
       } else {
       	this.photo = this.env.DEFAULT_IMG;
       }
+      this.loading.dismiss();
     });
-
-    this.loading.dismiss();
 
   }
 

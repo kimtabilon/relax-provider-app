@@ -34,13 +34,13 @@
       <ion-row padding class="form-header"><ion-col class="text-center">Hero Provider</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Name</span>
-        <ion-input class="field" value="{{profile.first_name}} {{profile.last_name}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{profile.first_name}} {{profile.last_name}}"></ion-input>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Payment</span>
-        <ion-input class="field" value="{{job.amount}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="cash" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{job.amount}}"></ion-input>
       </ion-row>
     </div>
 
@@ -48,23 +48,23 @@
       <ion-row padding class="form-header"><ion-col class="text-center">Job Details</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Job</span>
-        <ion-input class="field" value="{{form.option.name}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="{{form.option.icon}}" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{form.option.name}}"></ion-input>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Status</span>
-        <ion-input class="field" value="{{job.status}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="analytics" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{job.status}}"></ion-input>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Schedule Date</span>
-        <ion-input class="field" value="{{job.schedule_date}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="calendar" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{job.schedule_date}}"></ion-input>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Schedule Time</span>
-        <ion-input class="field" value="{{job.schedule_time}}"></ion-input>
         <ion-label class="field-label"><ion-icon name="clock" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" value="{{job.schedule_time}}"></ion-input>
       </ion-row>
     </div>
 
@@ -72,15 +72,16 @@
       <ion-row padding class="form-header"><ion-col class="text-center">{{a.title}}</ion-col></ion-row>
       <ion-row padding class="field-wrap" *ngFor="let field of a.fields">
         <span class="field-text">{{field.label}}</span>
-        <ion-input *ngIf="field.type == 'text'" class="field" [(ngModel)]="field.input" placeholder="{{field.label}}"></ion-input>
-        <ion-datetime *ngIf="field.type == 'date'" [(ngModel)]="field.input" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="{{field.label}}" class="field-date"></ion-datetime>
-        <ion-datetime *ngIf="field.type == 'time'" [(ngModel)]="field.input" display-format="hh:mm a" picker-format="hh:mm a" placeholder="{{field.label}}" class="field-date"></ion-datetime>
-        <ion-textarea *ngIf="field.type == 'textarea'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" ></ion-textarea>
-        <ion-select *ngIf="field.type == 'dropdown'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" >
+        
+        <ion-label class="field-label"><ion-icon name="{{field.icon}}" class="field-icon"></ion-icon></ion-label>
+        
+        <ion-input [readonly]="true" *ngIf="field.type == 'text'" class="field" [(ngModel)]="field.input" placeholder="{{field.label}}"></ion-input>
+        <ion-datetime [readonly]="true" *ngIf="field.type == 'date'" [(ngModel)]="field.input" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="{{field.label}}" class="field-date"></ion-datetime>
+        <ion-datetime [readonly]="true" *ngIf="field.type == 'time'" [(ngModel)]="field.input" display-format="hh:mm a" picker-format="hh:mm a" placeholder="{{field.label}}" class="field-date"></ion-datetime>
+        <ion-textarea [readonly]="true" *ngIf="field.type == 'textarea'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" ></ion-textarea>
+        <ion-select [disabled]="true" *ngIf="field.type == 'dropdown'" [(ngModel)]="field.input" placeholder="{{field.label}}" class="field" >
           <ion-select-option *ngFor="let select of field.values" value="{{select}}">{{select}}</ion-select-option>
         </ion-select>
-
-        <ion-label class="field-label"><ion-icon name="{{field.icon}}" class="field-icon"></ion-icon></ion-label>
       </ion-row>
     </div>
 
@@ -88,22 +89,23 @@
       <ion-row padding class="form-header"><ion-col class="text-center">Customer Information</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Name</span>
-        <ion-input class="field" [(ngModel)]="customer_info.name" placeholder="Name"></ion-input>
         <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.name" placeholder="Name"></ion-input>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Address</span>
-        <ion-textarea [(ngModel)]="customer_info.address" placeholder="Address" class="field" ></ion-textarea>
         <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
+        <ion-textarea [readonly]="true" [(ngModel)]="customer_info.address" placeholder="Address" class="field" ></ion-textarea>
       </ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Contact</span>
-        <ion-input class="field" [(ngModel)]="customer_info.contact" placeholder="Contact"></ion-input>
         <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.contact" placeholder="Contact"></ion-input>
       </ion-row>
     </div>
 
     <button *ngIf="status == 'For Confirmation'" class="btn btn-login" (click)="tapConfirm()" >CONFIRM</button>
+    <button *ngIf="status == 'For Confirmation'" class="btn btn-signup" (click)="tapDeny()" >NOT NOW</button>
     <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
 
   </ion-list>
