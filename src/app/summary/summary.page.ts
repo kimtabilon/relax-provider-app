@@ -42,7 +42,7 @@ export class SummaryPage implements OnInit {
 
   ionViewWillEnter() {
 
-    this.storage.get('customer').then((val) => {
+    this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
     });

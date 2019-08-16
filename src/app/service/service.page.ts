@@ -61,7 +61,6 @@ export class ServicePage implements OnInit {
 
   ionViewWillEnter() {
     this.loading.present();
-    this.authService.validateApp();
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
@@ -71,6 +70,7 @@ export class ServicePage implements OnInit {
         this.photo = this.env.DEFAULT_IMG;
       }
     });
+    this.authService.validateApp(this.user.email,this.user.password);
 
     this.activatedRoute.queryParams.subscribe((res)=>{
         this.services = JSON.parse(res.value).services;

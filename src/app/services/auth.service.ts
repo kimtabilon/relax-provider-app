@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Market } from '@ionic-native/market/ngx';
 import { NavController } from '@ionic/angular';
 import { tap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
@@ -21,15 +23,40 @@ export class AuthService {
     private storage: Storage,
     private env: EnvService,
     private navCtrl: NavController,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private appVersion: AppVersion,
+    private market: Market
   ) { }
 
-  validateApp() {
+  validateApp(email, password) {
     this.http.post(this.env.HERO_API + 'app/validate',
       {key: this.env.APP_ID}
     ).subscribe(
         data => {
-          this.storage.set('app', data); 
+          let response:any = data;
+          let app:any = response.data;
+
+          this.appVersion.getVersionNumber().then(value => {
+            if(value != app.build) {
+              
+              this.http.post(this.env.HERO_API + 'hero/login',{email: email, password: password})
+              .subscribe(data => {
+                  this.storage.set('hero', data);
+              },error => { console.log(error); });
+
+              this.appVersion.getPackageName().then(value => {
+                this.market.open(value);
+              }).catch(err => {
+                alert(err);
+              });
+            }
+            
+          }).catch(err => {
+            alert(err);
+          });
+           
+          this.storage.set('app', response);
+
         },
         error => {
           this.alertService.presentToast("Invalid App Key"); 

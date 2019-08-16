@@ -67,8 +67,6 @@ export class InboxPage implements OnInit {
   ionViewWillEnter() {
     this.loading.present();
 
-    this.authService.validateApp();
-
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;    
@@ -77,7 +75,8 @@ export class InboxPage implements OnInit {
       } else {
         this.photo = this.env.DEFAULT_IMG;
       }
-
+      this.authService.validateApp(this.user.email,this.user.password);
+      
       /*Get My Jobs*/
       this.http.post(this.env.HERO_API + 'inboxes/byUser',{app_key: this.env.APP_ID, user_id: this.user.id})
         .subscribe(data => {
@@ -97,7 +96,7 @@ export class InboxPage implements OnInit {
 
   async tapNoti(noti) {
     this.loading.present();
-
+    
     switch (noti.type) {
     	case "Available Job":
     		this.router.navigate(['/tabs/quotation'],{

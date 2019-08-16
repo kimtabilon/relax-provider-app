@@ -102,7 +102,12 @@ export class QuotationPage implements OnInit {
               this.formExist = false;
             }
             this.loading.dismiss();
-        },error => { console.log(error); this.loading.dismiss(); });
+        },error => { 
+          this.alertService.presentToast("Client removed this job.");
+          this.tapDeny();
+          console.log(error); 
+          this.loading.dismiss(); 
+        });
             
     });
 
@@ -124,7 +129,10 @@ export class QuotationPage implements OnInit {
         .subscribe(data => { 
       },error => { 
         this.loading.dismiss();
-        this.alertService.presentToast("Server not responding!"); 
+        // this.alertService.presentToast("Server not responding!"); 
+        this.alertService.presentToast("Client removed this job.");
+        this.tapDeny();
+
         console.log(error);
       },() => { 
         this.loading.dismiss();
@@ -137,6 +145,24 @@ export class QuotationPage implements OnInit {
 
       
   }
+
+  tapDeny() {
+    this.loading.present();
+    this.http.post(this.env.HERO_API + 'inboxes/hide',{id: this.quote.noti_id})
+    .subscribe(data => {
+        let response:any = data;
+        this.loading.dismiss();
+    },error => { 
+      this.loading.dismiss(); 
+      console.log(error);
+    },() => { 
+      this.loading.dismiss();
+      this.navCtrl.navigateRoot('/tabs/inbox'); 
+    });
+      
+  }
+
+
 
   logout() {
     this.loading.present();

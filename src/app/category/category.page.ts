@@ -67,8 +67,6 @@ export class CategoryPage implements OnInit {
   ionViewWillEnter() {
     this.loading.present();
 
-    this.authService.validateApp();
-
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;  
@@ -77,6 +75,8 @@ export class CategoryPage implements OnInit {
       } else {
         this.photo = this.env.DEFAULT_IMG;
       }
+
+      this.authService.validateApp(this.user.email,this.user.password);
     });
 
   	this.storage.get('app').then((val) => {
@@ -89,9 +89,13 @@ export class CategoryPage implements OnInit {
   	      let response:any = data;
   	      this.categories = response.data;
           this.title = 'Add Service'; 
-  	  },error => { this.title = 'Add Service'; }); 
+          this.loading.dismiss();
+  	  },error => { 
+        this.loading.dismiss();
+        this.title = 'Add Service'; 
+      }); 
      
-    this.loading.dismiss();
+    
   }
 
   tapCategory(category) {

@@ -105,6 +105,11 @@ export class ProfilePage implements OnInit {
       this.user = val.data;
       this.profile = val.data.profile;
 
+      this.http.post(this.env.HERO_API + 'hero/login',{email: this.user.email, password:  this.user.password})
+      .subscribe(data => {
+          this.storage.set('hero', data);
+      },error => { console.log(error); });
+
       if(this.profile.addresses.length) {
         this.address = this.profile.addresses[0];
       } else {

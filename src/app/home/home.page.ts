@@ -68,8 +68,6 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.loading.present();
 
-    this.authService.validateApp();
-
     this.http.post(this.env.HERO_API + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });
     this.http.post(this.env.API_URL + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });  
 
@@ -82,6 +80,8 @@ export class HomePage implements OnInit {
         this.photo = this.env.DEFAULT_IMG;
       }
 
+      this.authService.validateApp(this.user.email,this.user.password);
+      
       /*Get My Services*/
       this.http.post(this.env.HERO_API + 'hero/services',{id: this.user.id})
         .subscribe(data => {

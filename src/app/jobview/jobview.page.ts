@@ -112,9 +112,24 @@ export class JobviewPage implements OnInit {
               this.title = 'Job Info';
             }
             this.loading.dismiss();
-        },error => { this.title = 'Back'; this.loading.dismiss(); });
+        },error => { 
+          this.title = 'Back'; 
+          this.alertService.presentToast("Client removed this job.");
 
-          
+          this.http.post(this.env.HERO_API + 'inboxes/hide',{id: this.noti_id})
+          .subscribe(data => {
+              let response:any = data;
+              this.loading.dismiss();
+          },error => { 
+            this.loading.dismiss(); 
+            console.log(error);
+          },() => { 
+            this.loading.dismiss();
+            this.navCtrl.navigateRoot('/tabs/inbox'); 
+          });
+
+          this.loading.dismiss(); 
+        }); 
     });
 
   }
@@ -128,7 +143,6 @@ export class JobviewPage implements OnInit {
   }
 
   async tapConfirm() {
-
     let alert = await this.alertCtrl.create({
       header: '',
       message: 'Confirm Job?',
@@ -149,7 +163,20 @@ export class JobviewPage implements OnInit {
               .subscribe(data => {
                 this.loading.dismiss();
               },error => { 
-                this.alertService.presentToast("Server not responding!");
+                this.alertService.presentToast("Client removed this job.");
+                
+                this.http.post(this.env.HERO_API + 'inboxes/hide',{id: this.noti_id})
+                .subscribe(data => {
+                    let response:any = data;
+                    this.loading.dismiss();
+                },error => { 
+                  this.loading.dismiss(); 
+                  console.log(error);
+                },() => { 
+                  this.loading.dismiss();
+                  this.navCtrl.navigateRoot('/tabs/inbox'); 
+                });
+
                 this.loading.dismiss();
                 console.log(error);
               },

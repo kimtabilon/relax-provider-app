@@ -17,6 +17,9 @@ import { File } from '@ionic-native/File/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 
+import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Market } from '@ionic-native/market/ngx';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -35,7 +38,9 @@ import { FilePath } from '@ionic-native/file-path/ngx';
     Camera,
     File,
     WebView,
-    FilePath
+    FilePath,
+    AppVersion,
+    Market
   ],
   bootstrap: [AppComponent]
 })
