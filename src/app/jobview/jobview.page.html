@@ -97,16 +97,19 @@
         <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
         <ion-textarea [readonly]="true" [(ngModel)]="customer_info.address" placeholder="Address" class="field" ></ion-textarea>
       </ion-row>
-      <ion-row padding class="field-wrap">
+      <!-- <ion-row padding class="field-wrap">
         <span class="field-text">Contact</span>
         <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
         <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.contact" placeholder="Contact"></ion-input>
-      </ion-row>
+      </ion-row> -->
     </div>
 
     <button *ngIf="status == 'For Confirmation'" class="btn btn-login" (click)="tapConfirm()" >CONFIRM</button>
-    <button *ngIf="status == 'For Confirmation'" class="btn btn-signup" (click)="tapDeny()" >CANCEL</button>
-    <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
+    <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapStartJob()" >START JOB</button>
+    <button *ngIf="enableNoshow" class="btn btn-login" (click)="tapNoShow()" >NO SHOW</button>
+    <button *ngIf="status == 'For Confirmation' || status == 'Pending'" class="btn btn-signup" (click)="tapDeny()" >CANCEL JOB</button>
+    
+    <button *ngIf="status == 'In Progress'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
 
   </ion-list>
     

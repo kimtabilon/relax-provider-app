@@ -1,0 +1,33 @@
+<ion-content>
+	<div class="body login">
+		<ion-row>
+			<ion-col col-12 class="logo-wrap">
+				<img src="../../assets/img/login-logo.png" class="logo"><br><br>
+				<span class="label">RESEND ACTIVATION</span><br><br>
+			</ion-col>
+		</ion-row>		
+
+		<form #form="ngForm" (ngSubmit)="reset(form)" method="post">
+			<div class="form-field">
+			      
+			  <ion-row class="field-warp">
+	        <ion-label><ion-icon name="mail" class="icon"></ion-icon></ion-label>
+	        <ion-input ngModel type="email" name="email" placeholder="Email" class="field"></ion-input>  
+		    </ion-row>
+
+		    <ion-row class="field-warp">
+	        <ion-label><ion-icon name="lock" class="icon"></ion-icon></ion-label>
+	        <ion-input ngModel type="password" name="password" placeholder="Password" class="field"></ion-input>
+			  </ion-row>
+		  </div>    
+	      
+	      <ion-row>
+	        <ion-col class="signup-col">
+	          <button class="btn btn-login">SEND</button>
+	          <button class="btn btn-signup" routerLink="/login" routerDirection="root" >CANCEL</button>
+	        </ion-col>
+	      </ion-row>
+	      
+	    </form>
+	</div>
+</ion-content>

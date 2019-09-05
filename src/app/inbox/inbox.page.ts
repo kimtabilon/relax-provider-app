@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController, AlertController } from '@ionic/angular';
+import { MenuController, NavController, AlertController, ActionSheetController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -48,7 +48,8 @@ export class InboxPage implements OnInit {
     public jobService: JobService,
     public router : Router,
     private env: EnvService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public actionSheetController: ActionSheetController
   ) { 
   	this.menu.enable(true);	
   }
@@ -120,33 +121,32 @@ export class InboxPage implements OnInit {
 
     	default:
         this.loading.dismiss();
-        
-        let alert = await this.alertCtrl.create({
-          header: '',
-          message: 'Remove Notification',
-          buttons: [
-            {
-              text: 'Cancel',
-              role: 'cancel',
-              cssClass: 'secondary',
-              handler: (blah) => {
-                
-              }
-            }, {
-              text: 'Remove',
-              handler: () => {
-                this.loading.present();
-                this.http.post(this.env.HERO_API + 'inboxes/hide',{id: noti.id})
-                .subscribe(data => {
-                    let response:any = data;
-                    noti.seen = 'Yes';
-                    this.loading.dismiss();
-                },error => { this.loading.dismiss(); });
-              }
+
+        const actionSheet = await this.actionSheetController.create({
+          header: 'Actions',
+          buttons: [{
+            text: 'Hide Notification',
+            role: 'destructive',
+            icon: 'trash',
+            handler: () => {
+              this.loading.present();
+              this.http.post(this.env.HERO_API + 'inboxes/hide',{id: noti.id})
+              .subscribe(data => {
+                  let response:any = data;
+                  noti.seen = 'Yes';
+                  this.loading.dismiss();
+              },error => { this.loading.dismiss(); });
             }
-          ]
+          }, {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }]
         });
-        await alert.present();
+        await actionSheet.present();
     		break;
     }
       

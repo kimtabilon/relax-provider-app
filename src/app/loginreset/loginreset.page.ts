@@ -5,7 +5,6 @@ import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { LoadingService } from 'src/app/services/loading.service';
 import { AlertService } from 'src/app/services/alert.service';
-import { GetService } from 'src/app/services/get.service';
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from 'src/app/services/env.service';
@@ -26,7 +25,6 @@ export class LoginresetPage implements OnInit {
     private navCtrl: NavController,
     private alertService: AlertService,
     private storage: Storage,
-    public getService: GetService,
     public loading: LoadingService,
     private env: EnvService
   ) { }
@@ -43,6 +41,8 @@ export class LoginresetPage implements OnInit {
       this.http.post(this.env.HERO_API + 'hero/mail/resetpassword',{name: form.value.name, email: form.value.email})
 	    .subscribe(data => {
 	        let response:any = data;
+          console.log(response);
+
 	        this.loading.dismiss();
 	        this.alertService.presentToast("Check your email for new password");
 	    },error => { 

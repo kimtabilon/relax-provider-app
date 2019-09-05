@@ -28,15 +28,16 @@
     </span>
   </div>  
   
-  <ion-list lines="none">
+  <ion-list lines="none" *ngIf="option.enable_quote == 'No'">
     <ion-row></ion-row>
+    <ion-row padding class="form-header"><ion-col class="text-center">Rate per Hour</ion-col></ion-row>
     <ion-row padding class="field-wrap">
-      <ion-input  type="number" class="field" [(ngModel)]="heroService.pay_per" placeholder="Pay per {{pay_type}}"></ion-input>
+      <ion-input  type="number" class="field" [(ngModel)]="heroOption.pay_per" placeholder="Input Rate"></ion-input>
       <ion-label class="field-label"><ion-icon name="add" class="field-icon"></ion-icon></ion-label>
     </ion-row>
 
-    <button class="btn btn-login" (click)="tapNext()" >NEXT</button>
-    <button *ngIf="this.serviceExist" class="btn btn-signup" (click)="tapRemove()" >Delete</button>
+    <button class="btn btn-login" (click)="tapNext()" >SAVE</button>
+    <button *ngIf="this.optionExist" class="btn btn-signup" (click)="tapRemove()" >REMOVE</button>
 
   </ion-list>
     

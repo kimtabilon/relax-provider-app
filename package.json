@@ -1,6 +1,6 @@
 {
   "name": "hero-provider-app",
-  "version": "0.0.32",
+  "version": "0.0.45",
   "author": "MJSITECHSOLUTIONS",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -46,6 +46,8 @@
     "cordova-sqlite-storage": "3.2.0",
     "core-js": "^2.5.4",
     "google-libphonenumber": "^3.2.3",
+    "ionic-selectable": "^4.4.0",
+    "ngx-order-pipe": "^2.0.3",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.29"

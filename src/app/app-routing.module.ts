@@ -18,7 +18,10 @@ const routes: Routes = [
   { path: 'inbox', loadChildren: './inbox/inbox.module#InboxPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
   { path: 'help', loadChildren: './help/help.module#HelpPageModule' },
-  { path: 'loginreset', loadChildren: './loginreset/loginreset.module#LoginresetPageModule' }
+  { path: 'loginreset', loadChildren: './loginreset/loginreset.module#LoginresetPageModule' },
+  { path: 'schedule', loadChildren: './schedule/schedule.module#SchedulePageModule' },
+  { path: 'term', loadChildren: './term/term.module#TermPageModule' },
+  { path: 'resendemail', loadChildren: './resendemail/resendemail.module#ResendemailPageModule' }
 ];
 @NgModule({
   imports: [

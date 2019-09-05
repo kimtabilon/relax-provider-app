@@ -9,6 +9,7 @@ import { GetService } from 'src/app/services/get.service';
 import { Storage } from '@ionic/storage';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvService } from 'src/app/services/env.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-service',
@@ -30,9 +31,11 @@ export class ServicePage implements OnInit {
     gender: '',
     photo: ''
   };  
-  photo:any = '';
+  photo:any;
   services:any = [];
   title:any = 'Please wait...';
+
+  category_id:any;
 
   constructor(
   	private menu: MenuController, 
@@ -44,7 +47,8 @@ export class ServicePage implements OnInit {
     public getService: GetService,
     public router : Router,
     private env: EnvService,
-    public activatedRoute : ActivatedRoute
+    public activatedRoute : ActivatedRoute,
+    private http: HttpClient,
   ) {
   	this.menu.enable(true);	
   }
@@ -73,8 +77,21 @@ export class ServicePage implements OnInit {
     this.authService.validateApp(this.user.email,this.user.password);
 
     this.activatedRoute.queryParams.subscribe((res)=>{
-        this.services = JSON.parse(res.value).services;
-        this.title = JSON.parse(res.value).name;
+
+        let category_id:any = res.category_id;
+
+        this.http.post(this.env.HERO_API + 'categories/byID',{app_key: this.env.APP_ID, id: category_id })
+          .subscribe(data => {
+            let response:any = data;
+            if(response !== null) {
+              let category:any = response.data;
+              this.services = category.services;
+              this.title = category.name;  
+              this.category_id = category.id;  
+            }
+            
+          },error => { console.log(error);  
+        });
     });
 
     this.loading.dismiss();
@@ -83,11 +100,21 @@ export class ServicePage implements OnInit {
   tapService(service) {
     // console.log(this.services);
     this.loading.present();
-    this.router.navigate(['/tabs/form'],{
-      queryParams: {
-          service : JSON.stringify(service)
-      },
-    });
+    
+    // this.router.navigate(['/tabs/form'],{
+    //   queryParams: {
+    //       service : JSON.stringify(service)
+    //   },
+    // });
+
+    if(service.options.length) {
+      this.router.navigate(['/tabs/option'],{
+        queryParams: {
+            service_id : service.id,
+            category_id : this.category_id
+        },
+      });
+    }
     
     this.loading.dismiss();
   }

@@ -101,6 +101,10 @@ export class QuotationPage implements OnInit {
             }else{
               this.formExist = false;
             }
+
+            if(this.quote.noti_id == undefined) {
+              this.quote.noti_id = this.job.noti_id;
+            }
             this.loading.dismiss();
         },error => { 
           this.alertService.presentToast("Client removed this job.");
@@ -115,6 +119,7 @@ export class QuotationPage implements OnInit {
 
   tapBack() {
     this.loading.present();
+    this.quote.amount = 0;
     this.router.navigate(['/tabs/inbox'],{
       queryParams: {},
     }); 
@@ -138,16 +143,18 @@ export class QuotationPage implements OnInit {
         this.loading.dismiss();
         this.navCtrl.navigateRoot('/tabs/inbox'); 
       });
-      } else {
-        this.loading.dismiss();
-        this.alertService.presentToast("Input Quote Amount");
-      }
+      this.quote.amount = 0;  
+    } else {
+      this.loading.dismiss();
+      this.alertService.presentToast("Input Quote Amount");
+    }
 
       
   }
 
   tapDeny() {
     this.loading.present();
+    this.quote.amount = 0;
     this.http.post(this.env.HERO_API + 'inboxes/hide',{id: this.quote.noti_id})
     .subscribe(data => {
         let response:any = data;

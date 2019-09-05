@@ -84,15 +84,39 @@
 		color: #fff;
 	}
 
+	ion-item {
+		--background: none;
+	}
+
+	ion-list {
+		ion-item {
+			--background: $item-blue;
+			background: $item-blue;
+			--color: $gold;
+			color: $gold;
+
+			ion-icon {
+				--background: $gold;
+				background: $gold;
+				border-radius: 5px;
+				padding: 2px;
+				margin-right: 5px;
+			}
+		}
+		ion-item.no-background {
+			--background: none;
+			background: none;
+		}
+	}
+
 	.field-outer-wrap {
 		margin-top: -5px;
 	}
 
 	.service-label {
 		margin-left: 10px;
-		border-radius: 0 10px 0 0;
 		background: $item-blue;
-		padding: 10px 15px 10px 10px;
+		padding: 10px 15px;
 		line-height: 30px;
 		color: $gold;
 		font-size: 14pt;

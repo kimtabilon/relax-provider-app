@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, ActionSheetController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -32,10 +32,13 @@ export class HomePage implements OnInit {
     gender: '',
     photo: ''
   };  
+
+  heroOption:any = {};
+
   photo:any = '';
   categories:any = [];
   app:any = [];
-  myServices:any = [];
+  myOptions:any = [];
   title:any = 'Please wait...';
 
   constructor(
@@ -49,7 +52,9 @@ export class HomePage implements OnInit {
     public getService: GetService,
     public jobService: JobService,
     public router : Router,
-    private env: EnvService
+    private env: EnvService,
+    public actionSheetController: ActionSheetController,
+    public alertController: AlertController,
   ) { 
   	this.menu.enable(true);	
   }
@@ -74,6 +79,16 @@ export class HomePage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;  
+      
+      this.http.post(this.env.HERO_API + 'hero/login',{email: this.user.email, password:  this.user.password})
+      .subscribe(data => {
+          let response:any = data;
+          this.storage.set('hero', response);
+          this.user = response.data;
+      },error => { 
+        this.logout();
+        console.log(error); 
+      });
       if(this.profile.photo!==null) {
         this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
       } else {
@@ -83,12 +98,15 @@ export class HomePage implements OnInit {
       this.authService.validateApp(this.user.email,this.user.password);
       
       /*Get My Services*/
-      this.http.post(this.env.HERO_API + 'hero/services',{id: this.user.id})
+      this.http.post(this.env.HERO_API + 'hero/options',{id: this.user.id})
         .subscribe(data => {
             let response:any = data;
-            this.myServices = response.data.services;
+            this.myOptions = response.data.options;
             this.loading.dismiss();
-        },error => { this.loading.dismiss(); });
+        },error => { 
+          console.log(error);
+          this.loading.dismiss(); 
+        });
 
       this.storage.get('app').then((val) => {
         this.app = val.data;
@@ -98,19 +116,73 @@ export class HomePage implements OnInit {
 
   }
 
-  tapService(service) {
-    this.loading.present();
-    if(service.pivot.status) {
+  async tapOption(option, i) {
+    // this.loading.present();
+    this.heroOption.id = option.pivot.id;
+    if(option.pivot.status == 'Active' && option.enable_quote == "No") {
       this.router.navigate(['/tabs/form'],{
         queryParams: {
-            service : JSON.stringify(service)
+            option : JSON.stringify(option)
         },
       });
     } else {
-      this.alertService.presentToast("Service not active");
+      // this.loading.dismiss();
+
+      const actionSheet = await this.actionSheetController.create({
+        header: option.name,
+        buttons: [{
+          text: 'Delete',
+          role: 'destructive',
+          icon: 'trash',
+          handler: () => {
+            this.confirmDelete(option, i);
+          }
+        }, {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }]
+      });
+      await actionSheet.present();
     }
-    this.loading.dismiss();
+    // this.loading.dismiss();
       
+  }
+
+  async confirmDelete(option, i) {
+
+    const alert = await this.alertController.create({
+        header: 'Remove '+option.name+'?',
+        message: 'Continue if you want to delete this service.',
+        buttons: [
+          {
+            text: 'Dismiss',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+              // console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Continue',
+            handler: () => {
+              this.myOptions.splice(i, 1);
+              this.http.post(this.env.HERO_API + 'hero_options/delete',this.heroOption)
+              .subscribe(data => { 
+              },error => { 
+                this.alertService.presentToast("Server not responding!"); 
+                console.log(error);
+              },() => { 
+               
+              });
+            }
+          }
+        ]
+      });
+
+      await alert.present();
   }
 
   logout() {

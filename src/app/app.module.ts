@@ -19,16 +19,26 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Market } from '@ionic-native/market/ngx';
+import { OrderModule } from 'ngx-order-pipe';
+
+import {SchedulePageModule} from './schedule/schedule.module';
+import {TermPageModule} from './term/term.module';
+
+import { IonicSelectableModule } from 'ionic-selectable';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
   	BrowserModule, 
+    OrderModule,
   	IonicModule.forRoot(), 
   	AppRoutingModule,
   	HttpClientModule,
-  	IonicStorageModule.forRoot()
+  	IonicStorageModule.forRoot(),
+    SchedulePageModule,
+    TermPageModule,
+    IonicSelectableModule,
   ],
   providers: [
     StatusBar,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -31,17 +31,20 @@ export class FormPage implements OnInit {
     photo: ''
   };  
   photo:any = '';	
-  service:any;
-  serviceExist:any = false;
+  option:any = [];
+  optionExist:any = false;
   pay_type:any = '';
-  heroService:any = {
+  heroOption:any = {
     id: '',
     hero_id: '',
-    service_id: '',
+    option_id: '',
     pay_per: '',
-    status: '0'
+    status: 'Disable'
   };
   title:any;
+
+  category_id:any;
+  service_id:any;
 
   constructor(
   	private menu: MenuController, 
@@ -53,7 +56,8 @@ export class FormPage implements OnInit {
     public activatedRoute : ActivatedRoute,
     public loading: LoadingService,
     private http: HttpClient,
-    private env: EnvService
+    private env: EnvService,
+    public alertController: AlertController,
   ) {
   	this.menu.enable(true);	
   }
@@ -73,28 +77,34 @@ export class FormPage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;
+
+      this.heroOption.hero_id = this.user.id;
+
       if(this.profile.photo!==null) {
         this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
       } else {
         this.photo = this.env.DEFAULT_IMG;
       }
-      this.heroService.hero_id = this.user.id;
     });
 
     this.activatedRoute.queryParams.subscribe((res)=>{
-      this.service = JSON.parse(res.service);
-      this.heroService.service_id = this.service.id;
-      this.pay_type = this.service.pay_type;
-      this.title = this.service.name;
+      this.service_id = res.service_id;
+      this.category_id = res.category_id;
+      this.option = JSON.parse(res.option);
+      this.heroOption.option_id = this.option.id;
       
-      if(this.service.pivot) {
-        this.heroService.pay_per = this.service.pivot.pay_per;
-        this.heroService.id = this.service.pivot.id;
-        this.serviceExist = true;
+      this.pay_type = this.option.pay_type;
+      this.title = this.option.name;
+
+      
+      if(this.option.pivot) {
+        this.heroOption.pay_per = this.option.pivot.pay_per;
+        this.heroOption.id = this.option.pivot.id;
+        this.optionExist = true;
       } else {
-        this.heroService.id = '';
-        this.heroService.pay_per = '';
-        this.serviceExist = false;
+        this.heroOption.id = '';
+        this.heroOption.pay_per = '';
+        this.optionExist = false;
       }
     });
 
@@ -104,35 +114,93 @@ export class FormPage implements OnInit {
 
   tapBack() {
     this.loading.present();
-    this.router.navigate(['/tabs/home'],{
-      queryParams: {},
-    }); 
+    if(this.service_id != null) {
+      this.router.navigate(['/tabs/option'],{
+        queryParams: {
+          service_id : this.service_id,
+          category_id : this.category_id,
+        },
+      }); 
+    } else {
+      this.router.navigate(['/tabs/home'],{
+        queryParams: {},
+      }); 
+    }
+    
     this.loading.dismiss();  
   }
 
-  tapNext() {
-    this.loading.present();
-    /*Save Hero Service*/
-    this.http.post(this.env.HERO_API + 'hero_services/save',this.heroService)
-      .subscribe(data => { this.heroService.pay_per = '';
-      },error => { this.alertService.presentToast("Server not responding!"); 
-      },() => { this.navCtrl.navigateRoot('/tabs/home'); });
+  async tapNext() {
+    if(this.heroOption.pay_per >= 200) {
+      const alert = await this.alertController.create({
+        header: 'Save '+this.option.name+'?',
+        message: 'For the meantime, service will be inactive. Admin will notify you when its active. Continue if you want to save this service.',
+        buttons: [
+          {
+            text: 'Dismiss',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+              // console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Continue',
+            handler: () => {
+              
+                this.http.post(this.env.HERO_API + 'hero_options/save',this.heroOption)
+                .subscribe(data => { 
+                  this.heroOption.pay_per = '';
+                },error => { 
+                  console.log(error);
+                  this.alertService.presentToast("Server not responding!"); 
+                },() => { this.navCtrl.navigateRoot('/tabs/home'); });
+              
+            }
+          }
+        ]
+      });
 
-    this.loading.dismiss();
+      await alert.present();
+
+    } else {
+      this.alertService.presentToast("Minimun per hour is 200"); 
+    }
   }
 
-  tapRemove() {
-    this.loading.present();
+  async tapRemove() {
+    const alert = await this.alertController.create({
+      header: 'Remove '+this.option.name+'?',
+      message: 'Continue if you want to delete this service.',
+      buttons: [
+        {
+          text: 'Dismiss',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Continue',
+          handler: () => {
+            this.http.post(this.env.HERO_API + 'hero_options/delete',this.heroOption)
+            .subscribe(data => { this.heroOption.pay_per = '';
+            },error => { this.alertService.presentToast("Server not responding!"); 
+            },() => { this.navCtrl.navigateRoot('/tabs/home'); });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+    // this.loading.present();
 
     // console.log(this.heroService);
 
     /*Save Hero Service*/
-    this.http.post(this.env.HERO_API + 'hero_services/delete',this.heroService)
-      .subscribe(data => { this.heroService.pay_per = '';
-      },error => { this.alertService.presentToast("Server not responding!"); 
-      },() => { this.navCtrl.navigateRoot('/tabs/home'); });
+    
 
-    this.loading.dismiss();
+    // this.loading.dismiss();
   }
 
   logout() {

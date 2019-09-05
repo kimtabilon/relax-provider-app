@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MenuController, NavController, ActionSheetController, ToastController, Platform, LoadingController } from '@ionic/angular';
+import { MenuController, NavController, ActionSheetController, ToastController, Platform, LoadingController, ModalController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -15,6 +15,10 @@ import { File, FileEntry } from '@ionic-native/File/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { finalize } from 'rxjs/operators';
+
+import { SchedulePage } from '../schedule/schedule.page';
+import { OrderPipe } from 'ngx-order-pipe';
+import { IonicSelectableComponent } from 'ionic-selectable';
  
 const STORAGE_KEY = 'my_images';
 
@@ -24,43 +28,63 @@ const STORAGE_KEY = 'my_images';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
+  
+  hero:any = [];
 
-  hero:any = '';
-  user:any = {
-  	email: '',
-  	password: '',
-  	status: ''
-  };  
-  profile:any = {
-  	first_name: '',
-  	middle_name: '',
-  	last_name: '',
-  	birthday: '',
-  	gender: '',
-  	photo: ''
-  };	
-
-  address:any = {
+  account:any = {
     id: '',
-    profile_id: '',
-    street: '',
-    city: '',
-    province: '',
-    country: '',
-    zip: ''
-  };
-
-  contact:any = {
-    id: '',
-    profile_id: '',
-    dial_code: '',
-    number: ''
+    user_id: '',
+    app_key: '',
+    settings: {
+      offline: false,
+      auto_confirm: false,
+      account_lock: true,
+      preferred_location: [], 
+      block_dates: []
+    },
+    user: {
+      id:'',
+      email: '',
+      password: '',
+      status: ''
+    },
+    profile: {
+      id:'',
+      first_name: '',
+      middle_name: '',
+      last_name: '',
+      birthday: '',
+      gender: '',
+      photo: ''
+    },
+    contact: {
+      id: '',
+      profile_id: '',
+      dial_code: '',
+      number: ''
+    },
+    address: {
+      id: '',
+      profile_id: '',
+      street: '',
+      barangay: '',
+      city: '',
+      province: '',
+      country: '',
+      zip: ''
+    }
   };
 
 	photo:any = '';
   page:any = 'profile';
 
+  preferredCities:any = [];
+  province:any = [];
   images = [];
+
+  provinces:any = [];
+  cities:any = [];
+  barangays:any = [];
 
   constructor(
   	private menu: MenuController, 
@@ -82,7 +106,10 @@ export class ProfilePage implements OnInit {
     private platform: Platform, 
     private loadingController: LoadingController,
     private ref: ChangeDetectorRef, 
-    private filePath: FilePath
+    private filePath: FilePath,
+    public modalController: ModalController,
+    public alertController: AlertController,
+    private orderPipe: OrderPipe
   ) { }
 
   ngOnInit() {
@@ -98,25 +125,51 @@ export class ProfilePage implements OnInit {
     }, 2000);
   }
 
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: SchedulePage,
+      componentProps: { block_dates: this.account.settings.block_dates }
+    });
+
+    modal.onDidDismiss()
+      .then((data) => {
+        // const user = data['data']; // Here's your selected user!
+        let response:any = data;
+        this.account.settings.block_dates = response.data.block_dates;
+        this.saveSettings();
+    });
+
+    return await modal.present();
+  }
+
   ionViewWillEnter() {
     this.loading.present();
     this.storage.get('hero').then((val) => {
       this.hero = val;
-      this.user = val.data;
-      this.profile = val.data.profile;
+      this.account.user = val.data;
+      this.account.profile = val.data.profile;
 
-      this.http.post(this.env.HERO_API + 'hero/login',{email: this.user.email, password:  this.user.password})
+      this.account.user_id = this.account.user.id;
+      this.account.app_key = this.env.APP_ID;
+
+      this.http.post(this.env.HERO_API + 'hero/login',{email: this.account.user.email, password:  this.account.user.password})
       .subscribe(data => {
-          this.storage.set('hero', data);
-      },error => { console.log(error); });
+          let response:any = data;
+          this.storage.set('hero', response);
+          // this.user = response.data;
+      },error => { 
+        this.logout();
+        console.log(error); 
+      });
 
-      if(this.profile.addresses.length) {
-        this.address = this.profile.addresses[0];
+      if(this.account.profile.addresses.length) {
+        this.account.address = this.account.profile.addresses[0];
       } else {
-        this.address = {
+        this.account.address = {
           id: '',
-          profile_id: this.profile.id,
+          profile_id: this.account.profile.id,
           street: '',
+          barangay: '',
           city: '',
           province: '',
           country: '',
@@ -124,22 +177,45 @@ export class ProfilePage implements OnInit {
         };
       }
 
-      if(this.profile.contacts.length) {
-        this.contact = this.profile.contacts[0];
+      if(this.account.profile.contacts.length) {
+        this.account.contact = this.account.profile.contacts[0];
       } else {
-        this.contact = {
+        this.account.contact = {
           id: '',
-          profile_id: this.profile.id,
+          profile_id: this.account.profile.id,
           dial_code: '',
           number: ''
         };
       }
 
-      if(this.profile.photo!==null) {
-      	this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
+      if(this.account.profile.photo!==null) {
+      	this.photo = this.env.IMAGE_URL + 'uploads/' + this.account.profile.photo;
       } else {
       	this.photo = this.env.DEFAULT_IMG;
       }
+
+      this.http.post(this.env.HERO_API + 'account_settings/byUser', { user_id: this.account.user.id, app_key: this.env.APP_ID })
+        .subscribe(data => { 
+          // this.storage.set('hero', data);
+          let response:any = data;
+          this.account.settings = JSON.parse(response.data.settings);
+          this.account.id = response.data.id;
+          // console.log(this.account.settings);
+        },error => { 
+          let settings:any = JSON.stringify(this.account.settings);
+          this.http.post(this.env.HERO_API + 'account_settings/save', { user_id: this.account.user.id, app_key: this.env.APP_ID, settings: settings })
+            .subscribe(data => { 
+              let response:any = data;
+              this.account.settings = JSON.parse(response.data.settings);
+              this.account.id = response.data.id;
+            },error => { 
+              this.alertService.presentToast("Server not responding!");
+              console.log(error);
+            },() => { 
+          });  
+        },() => { 
+          // this.alertService.presentToast("Settings saved."); 
+      }); 
       this.loading.dismiss();
     });
 
@@ -151,27 +227,79 @@ export class ProfilePage implements OnInit {
   	this.loading.dismiss();
   }
 
-  tapMyPhoto(){
-  	this.loading.present();
-  	this.page='photo';
-  	this.loading.dismiss();
-  }
-
-  tapMyAddress(){
+  tapMyCard(){
     this.loading.present();
-    this.page='address';
+    this.page='card';
     this.loading.dismiss();
   }
 
-  tapMyContact(){
+  tapMySettings(){
     this.loading.present();
-    this.page='contact';
+
+    fetch('./assets/json/refprovince.json').then(res => res.json())
+    .then(json => {
+      let records:any = json.RECORDS
+      this.province = records.filter(item => item.provDesc === this.account.address.province);
+    });
+
+    fetch('./assets/json/refcitymun.json').then(res => res.json())
+    .then(json => {
+      let records:any = json.RECORDS
+      this.preferredCities = records.filter(item => item.provCode === this.province[0].provCode);
+      this.preferredCities = this.orderPipe.transform(this.preferredCities, 'provDesc');
+      // console.log(this.cities);
+    });
+
+    this.page='settings';
+    this.loading.dismiss();
+  }
+
+  savePreferredLocation() {
+    // console.log(this.account.settings.preferred_location);
+    this.loading.present();
+    let settings:any = JSON.stringify(this.account.settings);
+    this.http.post(this.env.HERO_API + 'account_settings/save', { user_id: this.account.user.id, app_key: this.env.APP_ID, settings: settings })
+      .subscribe(data => { 
+        this.loading.dismiss();
+      },error => { 
+        this.alertService.presentToast("Server not responding!");
+        console.log(error);
+        this.loading.dismiss();
+      },() => { 
+        // this.alertService.presentToast("Settings Saved"); 
+    });  
+  }
+
+  saveSettings(){
+    this.loading.present();
+    let settings:any = JSON.stringify(this.account.settings);
+    console.log('Saving...');
+    this.http.post(this.env.HERO_API + 'account_settings/save', { user_id: this.account.user.id, app_key: this.env.APP_ID, settings: settings })
+      .subscribe(data => { 
+        let response:any = data;
+        this.account.settings = JSON.parse(response.data.settings);
+        this.account.id = response.data.id;
+        this.loading.dismiss();
+        console.log('DONE');
+      },error => { 
+        this.alertService.presentToast("Server not responding!");
+        console.log(error);
+        this.loading.dismiss();
+      },() => { 
+        // this.alertService.presentToast("Settings Saved"); 
+    });  
+    // console.log(this.account);
+  }
+
+  tapMyLogs(){
+    this.loading.present();
+    this.page='logs';
     this.loading.dismiss();
   }
 
   tapUpdate() {
     this.loading.present();
-    this.http.post(this.env.HERO_API + 'profile/modify',{ user: this.user })
+    this.http.post(this.env.HERO_API + 'profile/modify',{ user: this.account.user })
       .subscribe(data => { 
       	this.storage.set('hero', data);
       },error => { this.alertService.presentToast("Server not responding!");
@@ -180,13 +308,108 @@ export class ProfilePage implements OnInit {
     this.loading.dismiss();
   }
 
+  async tapUpdateAccount() {
+    const alert = await this.alertController.create({
+      header: 'Send updated account information?',
+      message: 'Admin will review your changes. If you continue, you will not be able to edit your information.',
+      buttons: [
+        {
+          text: 'Dismiss',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+
+          }
+        }, {
+          text: 'Continue',
+          handler: () => {
+            this.loading.present();
+
+            let account:any = JSON.parse(JSON.stringify(this.account));
+            let inbox:any = {};
+
+            delete account.profile.addresses;
+            delete account.profile.contacts;
+            delete account.user.profile;
+            delete account.settings;
+
+            delete account.profile.created_at;
+            delete account.profile.deleted_at;
+            delete account.profile.updated_at;
+
+            delete account.address.profile_id;
+            delete account.address.created_at;
+            delete account.address.deleted_at;
+            delete account.address.updated_at;
+
+            delete account.contact.profile_id;
+            delete account.contact.created_at;
+            delete account.contact.deleted_at;
+            delete account.contact.updated_at;
+
+            delete account.user.profile_id;
+            delete account.user.created_at;
+            delete account.user.deleted_at;
+            delete account.user.updated_at;
+
+            inbox.user_id = account.user_id;
+            inbox.app_key = account.app_key;
+            inbox.data = JSON.stringify({
+              hero: account.user,
+              profile: account.profile,
+              address: account.address,
+              contact: account.contact,
+            });
+
+            inbox.request = 'Request for account update.';
+            inbox.type = 'Update Account';
+            inbox.link = '<ul><li><a href="'+this.env.HERO_ADMIN + 'profiles/'+account.profile.id+'/edit" target="_blank">Goto Profile</a></li>' +
+                         '<li><a href="'+this.env.HERO_ADMIN + 'heroes/'+account.user.id+'/edit" target="_blank">Goto Hero</a></li>' +
+                         '<li><a href="'+this.env.HERO_ADMIN + 'addresses/'+account.address.id+'/edit" target="_blank">Goto Address</a></li>' +
+                         '<li><a href="'+this.env.HERO_ADMIN + 'contacts/'+account.contact.id+'/edit" target="_blank">Goto Contact</a></li></ul>';
+
+
+            this.http.post(this.env.HERO_API + 'admin_inboxes/save', inbox)
+              .subscribe(data => { 
+                // this.storage.set('hero', data);
+              },error => { 
+                this.alertService.presentToast("Server not responding!");
+                console.log(error);
+              },() => { 
+                this.alertService.presentToast("Request Sent. Edit Lock."); 
+            }); 
+
+            this.account.settings.account_lock = true;
+            let settings:any = JSON.stringify(this.account.settings);
+            this.http.post(this.env.HERO_API + 'account_settings/save', { user_id: this.account.user.id, app_key: this.env.APP_ID, settings: settings })
+              .subscribe(data => { 
+                let response:any = data;
+                this.account.settings = JSON.parse(response.data.settings);
+                this.account.id = response.data.id;
+              },error => { 
+                this.alertService.presentToast("Server not responding!");
+                console.log(error);
+              },() => { 
+                // this.alertService.presentToast("Account"); 
+            });  
+
+            this.loading.dismiss();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   tapUpdateAddr() {
     this.loading.present();
 
     /*Confirm Jobs*/
-    this.http.post(this.env.HERO_API + 'address/modify',{ address: this.address })
+    this.http.post(this.env.HERO_API + 'address/modify',{ address: this.account.address })
       .subscribe(data => { 
-        this.hero.data.profile.addresses[0] = this.address;
+        this.hero.data.profile.addresses[0] = this.account.address;
         this.storage.set('hero', this.hero);
       },error => { 
         this.alertService.presentToast("Server not responding!");
@@ -200,14 +423,51 @@ export class ProfilePage implements OnInit {
     this.loading.present();
 
     /*Confirm Jobs*/
-    this.http.post(this.env.HERO_API + 'contact/modify',{ contact: this.contact })
+    this.http.post(this.env.HERO_API + 'contact/modify',{ contact: this.account.contact })
       .subscribe(data => { 
-        this.hero.data.profile.contacts[0] = this.contact;
+        this.hero.data.profile.contacts[0] = this.account.contact;
         this.storage.set('hero', this.hero);
       },error => { this.alertService.presentToast("Server not responding!");
     },() => { this.alertService.presentToast("Contact updated!"); });  
 
     this.loading.dismiss();
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Request access?',
+      message: 'Wait for admin confirmation to access and modify your account information.',
+      buttons: [
+        {
+          text: 'Dismiss',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            // console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Send Request',
+          handler: () => {
+            // console.log('Confirm Okay');
+            let request:any = 'Hero Requesting access to edit account information.';
+            let link:any = '<a href="'+this.env.HERO_ADMIN + 'accountSettings/'+this.account.id+'/edit" target="_blank">Goto Account Setting</a>';
+
+
+            this.http.post(this.env.HERO_API + 'admin_inboxes/save', { request: request, link: link, type: 'Unlock Account', data: '' })
+              .subscribe(data => { 
+                // this.storage.set('hero', data);
+              },error => { 
+                this.alertService.presentToast("Server not responding!");
+                console.log(error);
+              },() => { 
+                this.alertService.presentToast("Request Sent"); 
+            }); 
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   loadStoredImages() {
@@ -339,8 +599,8 @@ export class ProfilePage implements OnInit {
 	}	
 
 	startUpload(imgEntry) {
-			this.photo = imgEntry.path;
-			this.profile.photo = imgEntry.name;
+			// this.photo = imgEntry.path;
+			this.account.profile.photo = imgEntry.name;
 	    this.file.resolveLocalFilesystemUrl(imgEntry.filePath)
 	        .then(entry => {
 	            ( < FileEntry > entry).file(file => this.readFile(file));

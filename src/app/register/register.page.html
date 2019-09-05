@@ -51,7 +51,7 @@
 			        <ion-datetime formControlName="birthday" placeholder="Day" display-format="DD" class="field"></ion-datetime>
 			  	</ion-col>    
 			  	<ion-col>
-			        <ion-datetime formControlName="birthyear" placeholder="Year" display-format="YYYY" class="field"></ion-datetime>
+			        <ion-datetime formControlName="birthyear" placeholder="Year" max="{{eightenyearsAgo}}" display-format="YYYY" class="field"></ion-datetime>
 			  	</ion-col> 
 			  </ion-row>
 			  <div class="validation-errors">
@@ -85,7 +85,7 @@
 			  <ion-row class="field-warp">
 			  	<ion-label><ion-icon name="female" class="icon calendar"></ion-icon></ion-label>
 				  <ion-col>  
-				   	<ion-select  class="field" formControlName="gender" cancelText="Cancel" okText="OK">
+				   	<ion-select placeholder="Gender"  class="field" formControlName="gender" cancelText="Cancel" okText="OK">
 			        <ion-select-option *ngFor="let gender of genders" [value]="gender">{{gender}}</ion-select-option>
 			      </ion-select>
 			    </ion-col>  
@@ -94,17 +94,17 @@
 		    <div formGroupName="country_phone">
 
 		    	<ion-row class="field-warp hide">
-				        <ion-label><ion-icon name="phone-portrait" class="icon"></ion-icon></ion-label>
-				        <ion-select formControlName="country" cancelText="Cancel" okText="OK">
-			          	<ion-select-option *ngFor="let item of countries" [value]="item">{{item.name}}</ion-select-option>
-			        	</ion-select>
+			        <ion-label><ion-icon name="phone-portrait" class="icon"></ion-icon></ion-label>
+			        <ion-select formControlName="country" cancelText="Cancel" okText="OK" placeholder="Gender">
+		          	<ion-select-option *ngFor="let item of countries" [value]="item">{{item.name}}</ion-select-option>
+		        	</ion-select>
 				  </ion-row>
 				  <ion-row class="field-warp with-margin-bottom">
-				  	<ion-label class="text-label">Phone Number</ion-label>
+				  	<ion-label class="text-label">Mobile Number</ion-label>
 				  </ion-row>
 			    <ion-row class="field-warp">
 				        <ion-label><ion-icon name="phone-portrait" class="icon"></ion-icon></ion-label>
-				        <ion-input formControlName="phone" placeholder="{{ validations_form.value.country_phone.country.sample_phone }}" class="field"></ion-input>
+				        <ion-input formControlName="phone" placeholder="Mobile Number" class="field"></ion-input>
 				  </ion-row>
 				  <div class="validation-errors">
 		        <ng-container *ngFor="let validation of validation_messages.phone">
@@ -119,9 +119,9 @@
 			  	<ion-label class="text-label">Address</ion-label>
 			  </ion-row>
 
-	    	<ion-row class="field-warp">
+			  <ion-row class="field-warp">
 			        <ion-label><ion-icon name="pin" class="icon"></ion-icon></ion-label>
-			        <ion-input formControlName="street" placeholder="Street" class="field"></ion-input>
+			        <ion-col>	<ion-input formControlName="street" placeholder="Street" class="field"></ion-input></ion-col>
 			  </ion-row>
 			  <div class="validation-errors">
 		      <ng-container *ngFor="let validation of validation_messages.street">
@@ -131,9 +131,45 @@
 		      </ng-container>
 		    </div>
 
-			  <ion-row class="field-warp">
+		    <ion-row class="field-warp">
 			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
-			        <ion-input formControlName="city" placeholder="City" class="field"></ion-input>
+			        <ion-col>  
+					      <ionic-selectable
+					      	class="field"
+							    formControlName="province" 
+							    [items]="provinces"
+							    placeholder="Province"
+							    itemValueField="provCode"
+							    itemTextField="provDesc"
+							    [canSearch]="true"
+							    (onChange)="tapProvince($event)">
+							  </ionic-selectable>
+					    </ion-col>  
+			  </ion-row>
+
+			  <div class="validation-errors">
+		      <ng-container *ngFor="let validation of validation_messages.province">
+		        <div class="error-message" *ngIf="validations_form.get('province').hasError(validation.type) && (validations_form.get('province').dirty || validations_form.get('province').touched)">
+		          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+		        </div>
+		      </ng-container>
+		    </div>
+
+		    <ion-row class="field-warp">
+			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-col>  
+
+					      <ionic-selectable
+					        class="field"
+							    formControlName="city" 
+							    [items]="cities"
+							    placeholder="City"
+							    itemValueField="citymunCode"
+							    itemTextField="citymunDesc"
+							    [canSearch]="true"
+							    (onChange)="tapCity($event)">
+							  </ionic-selectable>
+					    </ion-col>  
 			  </ion-row>
 			  <div class="validation-errors">
 		      <ng-container *ngFor="let validation of validation_messages.city">
@@ -143,13 +179,24 @@
 		      </ng-container>
 		    </div>
 
-			  <ion-row class="field-warp">
-			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
-			        <ion-input formControlName="province" placeholder="Province" class="field"></ion-input>
+	    	<ion-row class="field-warp">
+	    				<ion-label><ion-icon class="icon"></ion-icon></ion-label>
+			        <ion-col>  
+					      <ionic-selectable
+					        class="field"
+							    formControlName="barangay" 
+							    [items]="barangays"
+							    placeholder="Barangay"
+							    itemValueField="brgyCode"
+							    itemTextField="brgyDesc"
+							    [canSearch]="true"
+							    (onChange)="tapBarangay($event)">
+							  </ionic-selectable>
+					    </ion-col> 
 			  </ion-row>
 			  <div class="validation-errors">
-		      <ng-container *ngFor="let validation of validation_messages.province">
-		        <div class="error-message" *ngIf="validations_form.get('province').hasError(validation.type) && (validations_form.get('province').dirty || validations_form.get('province').touched)">
+		      <ng-container *ngFor="let validation of validation_messages.barangay">
+		        <div class="error-message" *ngIf="validations_form.get('barangay').hasError(validation.type) && (validations_form.get('barangay').dirty || validations_form.get('barangay').touched)">
 		          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
 		        </div>
 		      </ng-container>
@@ -157,23 +204,29 @@
 
 			  <ion-row class="field-warp">
 			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
-			        <ion-input formControlName="country" placeholder="Country" class="field"></ion-input>
-			  </ion-row>
-			  <div class="validation-errors">
-		      <ng-container *ngFor="let validation of validation_messages.country">
-		        <div class="error-message" *ngIf="validations_form.get('country').hasError(validation.type) && (validations_form.get('country').dirty || validations_form.get('country').touched)">
-		          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
-		        </div>
-		      </ng-container>
-		    </div>
-
-			  <ion-row class="field-warp">
-			        <ion-label><ion-icon class="icon"></ion-icon></ion-label>
-			        <ion-input formControlName="zip" placeholder="Zip" class="field"></ion-input>
+			        <ion-col>	
+			        	<ion-input formControlName="zip" placeholder="Zip" class="field"></ion-input>
+			        </ion-col>	
 			  </ion-row>
 			  <div class="validation-errors">
 		      <ng-container *ngFor="let validation of validation_messages.zip">
 		        <div class="error-message" *ngIf="validations_form.get('zip').hasError(validation.type) && (validations_form.get('zip').dirty || validations_form.get('zip').touched)">
+		          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
+		        </div>
+		      </ng-container>
+		    </div>
+
+		    <ion-row class="field-warp">
+		        <ion-label><ion-icon  class="icon"></ion-icon></ion-label>
+		        <ion-col>  
+					   	<ion-select placeholder="Country" class="field" formControlName="country" cancelText="Cancel" okText="OK" >
+				        <ion-select-option *ngFor="let country of countries" [value]="country.name" >{{country.name}}</ion-select-option>
+				      </ion-select>
+				    </ion-col>  
+			  </ion-row>
+			  <div class="validation-errors">
+		      <ng-container *ngFor="let validation of validation_messages.country">
+		        <div class="error-message" *ngIf="validations_form.get('country').hasError(validation.type) && (validations_form.get('country').dirty || validations_form.get('country').touched)">
 		          <ion-icon name="information-circle-outline"></ion-icon> {{ validation.message }}
 		        </div>
 		      </ng-container>
@@ -222,8 +275,8 @@
 		        </div>
 		      </ng-container>
 		    </div>
-		    <ion-row class="field-warp with-margin-top">
-		      <ion-checkbox color="primary" formControlName="terms"></ion-checkbox> <ion-label color="primary"> &nbsp; I accept terms and conditions</ion-label>
+		    <ion-row class="field-warp with-margin-top" >
+		      <ion-checkbox color="primary" formControlName="terms"></ion-checkbox> <ion-label color="primary"> &nbsp; <span (click)="terms();">I accept terms and conditions</span></ion-label>
 		    </ion-row>
 		    <div class="validation-errors">
 		      <ng-container *ngFor="let validation of validation_messages.terms">
@@ -232,12 +285,10 @@
 		        </div>
 		      </ng-container>
 		    </div>
-		  </div>   
-
-	      
+		  </div>   	      
 	      <ion-row>
 	        <ion-col class="signup-col">
-	          <button class="btn btn-login" >SIGN UP</button>
+	          <button class="btn btn-login" >{{signup_btn}}</button>
 	          <button class="btn btn-signup" routerLink="/login" routerDirection="root" >BACK</button>
 	        </ion-col>
 	      </ion-row>

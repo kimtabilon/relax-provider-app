@@ -19,49 +19,66 @@
       <ion-col col-12>
         <img class="img" src="{{photo}}"><br>
         <span class="label">Welcome Back</span><br>
-        <span class="name" *ngIf="user != undefined">{{ profile.first_name  }}</span><br>
+        <span class="name" *ngIf="account.user != undefined">{{ account.profile.first_name  }}</span><br>
       </ion-col>
     </ion-row>
 
     <span class="service-label" (click)="tapMyProfile()" [ngClass]="page=='profile' ? 'active-tab' : ''">
       <ion-icon name="person"></ion-icon>
     </span>
-    <span class="service-label" (click)="tapMyPhoto()" [ngClass]="page=='photo' ? 'active-tab' : ''">
-      <ion-icon name="camera"></ion-icon>
+    <!-- <span class="service-label" (click)="tapMyCard()" [ngClass]="page=='card' ? 'active-tab' : ''">
+      <ion-icon name="card"></ion-icon>
+    </span> -->
+    <span class="service-label" (click)="tapMySettings()" [ngClass]="page=='settings' ? 'active-tab' : ''">
+      <ion-icon name="settings"></ion-icon>
     </span>
-    <span class="service-label" (click)="tapMyAddress()" [ngClass]="page=='address' ? 'active-tab' : ''">
-      <ion-icon name="pin"></ion-icon>
-    </span>
-    <span class="service-label" (click)="tapMyContact()" [ngClass]="page=='contact' ? 'active-tab' : ''">
-      <ion-icon name="call"></ion-icon>
+    <span class="service-label" (click)="tapMyLogs()" [ngClass]="page=='logs' ? 'active-tab' : ''">
+      <ion-icon name="list-box"></ion-icon>
     </span>
   </div>  
   
   <ion-list lines="none" *ngIf="page=='profile'">
+
     <div class="field-outer-wrap">
-      <ion-row padding class="form-header"><ion-col class="text-center">My Profile</ion-col></ion-row>
+      <ion-row padding class="form-header"><ion-col class="text-center">ACCOUNT</ion-col></ion-row>
+      <ion-row padding class="field-wrap">
+        <span class="field-text">Email</span>
+        <ion-label class="field-label"><ion-icon name="mail" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="account.user.email" [disabled]="account.settings.account_lock" placeholder="Email"></ion-input>
+      </ion-row>
+
+      <ion-row padding class="field-wrap">
+        <span class="field-text">Password</span>
+        <ion-label class="field-label"><ion-icon name="lock" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="account.user.password" [disabled]="account.settings.account_lock" placeholder="Password"></ion-input>
+      </ion-row>
+      
+    </div>
+
+    <div class="field-outer-wrap">
+      <ion-row padding class="form-header"><ion-col class="text-center">PROFILE</ion-col></ion-row>
       <ion-row padding class="field-wrap">
       	<span class="field-text">First Name</span>
         <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="profile.first_name" placeholder="First Name"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.profile.first_name" [disabled]="account.settings.account_lock" placeholder="First Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Middle Name</span>
         <ion-label class="field-label"><ion-icon name="person-add" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="profile.middle_name" placeholder="Middle Name"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.profile.middle_name" [disabled]="account.settings.account_lock" placeholder="Middle Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Last Name</span>
         <ion-label class="field-label"><ion-icon name="people" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="profile.last_name" placeholder="Last Name"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.profile.last_name" [disabled]="account.settings.account_lock" placeholder="Last Name"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
       	<span class="field-text">Gender</span>
         <ion-label class="field-label"><ion-icon name="transgender" class="field-icon"></ion-icon></ion-label>
-        <ion-select  [(ngModel)]="profile.gender" placeholder="Gender" class="field" >
+        <ion-select  [(ngModel)]="account.profile.gender" [disabled]="account.settings.account_lock" placeholder="Gender" class="field" >
           <ion-select-option value="Male">Male</ion-select-option>
           <ion-select-option value="Female">Female</ion-select-option>
         </ion-select>
@@ -70,100 +87,184 @@
       <ion-row padding class="field-wrap">
       	<span class="field-text">Birthday</span>
         <ion-label class="field-label"><ion-icon name="calendar" class="field-icon"></ion-icon></ion-label>
-        <ion-datetime [(ngModel)]="profile.birthday" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" placeholder="Birthday" class="field-date"></ion-datetime>
+        <ion-datetime [(ngModel)]="account.profile.birthday" display-format="MMM DD, YYYY" picker-format="MMM DD, YYYY" [disabled]="account.settings.account_lock" placeholder="Birthday" class="field-date"></ion-datetime>
       </ion-row>
 
       <ion-row padding class="field-wrap">
-      	<span class="field-text">Photo</span>
+        <span class="field-text">Photo</span>
         <ion-label class="field-label"><ion-icon name="image" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="profile.photo" placeholder="Photo"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.profile.photo" [disabled]="account.settings.account_lock" placeholder="Photo"></ion-input>
       </ion-row>
 
+      <ion-row padding class="field-wrap">
+        <ion-item *ngFor="let img of images; index as pos" text-wrap>
+          <ion-thumbnail slot="start">
+            <ion-img [src]="img.path"></ion-img>
+          </ion-thumbnail>
+          <ion-button slot="end" fill="clear" (click)="startUpload(img)">
+            <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" fill="clear" (click)="deleteImage(img, pos)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <ion-toolbar>
+          <ion-button fill="secondary" expand="full" (click)="selectImage()" [disabled]="account.settings.account_lock" >
+            <ion-icon slot="start" name="camera"></ion-icon>
+            Add Photo</ion-button>
+        </ion-toolbar>
+      </ion-row>
       
     </div>
 
-    <button class="btn btn-login" (click)="tapUpdate()" >UPDATE</button>
+    <!-- <button class="btn btn-login" (click)="tapUpdate()" [disabled]="account.settings.account_lock" >Save</button> -->
 
-  </ion-list>
- 
-  <ion-list *ngIf="page == 'photo'">
-    <ion-item *ngFor="let img of images; index as pos" text-wrap>
-      <ion-thumbnail slot="start">
-        <ion-img [src]="img.path"></ion-img>
-      </ion-thumbnail>
-      <ion-label>
-        {{ img.name }}
-      </ion-label>
-      <ion-button slot="end" fill="clear" (click)="startUpload(img)">
-        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
-      </ion-button>
-      <ion-button slot="end" fill="clear" (click)="deleteImage(img, pos)">
-        <ion-icon slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-    </ion-item>
-
-    <ion-toolbar color="primary">
-	    <ion-button fill="clear" expand="full" color="light" (click)="selectImage()">
-	      <ion-icon slot="start" name="camera"></ion-icon>
-	      Add Photo</ion-button>
-	  </ion-toolbar>
-  </ion-list>
-  
-  <ion-list *ngIf="page == 'address'">
     <div class="field-outer-wrap">
-      <ion-row padding class="form-header"><ion-col class="text-center">My Address</ion-col></ion-row>
+      <ion-row padding class="form-header"><ion-col class="text-center">ADDRESS</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Street</span>
         <ion-label class="field-label"><ion-icon name="home" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="address.street" placeholder="Street"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.street" [disabled]="account.settings.account_lock" placeholder="Street"></ion-input>
+      </ion-row>
+
+      <ion-row padding class="field-wrap">
+        <span class="field-text">Barangay</span>
+        <ion-label class="field-label"><ion-icon name="bookmarks" class="field-icon"></ion-icon></ion-label>
+        <ion-input class="field" [(ngModel)]="account.address.barangay" [disabled]="account.settings.account_lock" placeholder="Barangay"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">City</span>
         <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="address.city" placeholder="City"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.city" [disabled]="account.settings.account_lock" placeholder="City"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Province</span>
         <ion-label class="field-label"><ion-icon name="map" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="address.province" placeholder="Province"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.province" [disabled]="account.settings.account_lock" placeholder="Province"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Country</span>
         <ion-label class="field-label"><ion-icon name="planet" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="address.country" placeholder="Country"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.country" [disabled]="account.settings.account_lock" placeholder="Country"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Zip</span>
         <ion-label class="field-label"><ion-icon name="more" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="address.zip" placeholder="Zip"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.zip" [disabled]="account.settings.account_lock" placeholder="Zip"></ion-input>
       </ion-row>
       
     </div>
 
-    <button class="btn btn-login" (click)="tapUpdateAddr()" >UPDATE</button>
-  </ion-list>
+    <!-- <button class="btn btn-login" (click)="tapUpdateAddr()" [disabled]="account.settings.account_lock" >Save</button> -->
 
-  <ion-list *ngIf="page == 'contact'">
     <div class="field-outer-wrap">
-      <ion-row padding class="form-header"><ion-col class="text-center">My Contact</ion-col></ion-row>
+      <ion-row padding class="form-header"><ion-col class="text-center">CONTACT</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Dial Code</span>
         <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="contact.dial_code" placeholder="Dial Code"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.contact.dial_code" [disabled]="account.settings.account_lock" placeholder="Dial Code"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Number</span>
         <ion-label class="field-label"><ion-icon name="phone-portrait" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="contact.number" placeholder="Number"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.contact.number" [disabled]="account.settings.account_lock" placeholder="Number"></ion-input>
       </ion-row>
       
     </div>
 
-    <button class="btn btn-login" (click)="tapUpdateContact()" >UPDATE</button>
+    <!-- <button class="btn btn-login" (click)="tapUpdateContact()" [disabled]="account.settings.account_lock" >SAVE</button> -->
+    <button class="btn btn-login" (click)="tapUpdateAccount()" *ngIf="account.settings.account_lock==false" >REQUEST FOR UPDATE</button>
+
+  </ion-list>
+  
+  <!-- <ion-list *ngIf="page == 'card'" lines="full">
+    <ion-row padding class="form-header"><ion-col class="text-center">CARD INFORMATION</ion-col></ion-row>
+    <ion-item>
+      <ion-label position="floating">Account Number</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Address</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Bank</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-button expand="block" color="secondary">Save</ion-button>
+  </ion-list> -->
+
+  <ion-list *ngIf="page == 'settings'">
+    <ion-row padding class="form-header"><ion-col class="text-center">SETTINGS</ion-col></ion-row>
+
+    <ion-item>
+      <ion-icon name="power" size="small"></ion-icon>
+      <ion-label text-wrap>Switch Offline</ion-label>
+      <ion-toggle [(ngModel)]="account.settings.offline" slot="end" checked  color="primary" (ionChange)="saveSettings()"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="pin" size="small"></ion-icon>
+      <ion-label>Preferred Location</ion-label>
+      <ion-select multiple="true" cancelText="Dismiss" okText="Okay" [(ngModel)]="account.settings.preferred_location" (ionChange)="savePreferredLocation()">
+        <ion-select-option *ngFor="let city of preferredCities" [value]="city.citymunDesc">{{city.citymunDesc}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="checkmark" size="small"></ion-icon>
+      <ion-label text-wrap>Auto Confirm Job</ion-label>
+      <ion-toggle [(ngModel)]="account.settings.auto_confirm" slot="end" checked  color="secondary" (ionChange)="saveSettings()"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="key" size="small"></ion-icon>
+      <ion-label>Edit Account</ion-label>
+      <ion-button slot="end" (click)="presentAlertConfirm()">
+        Request
+      </ion-button>
+    </ion-item>
+
+    <ion-item (click)="presentModal()" detail>
+      <ion-icon name="calendar" size="small"></ion-icon>
+      <ion-label>
+        Manage Schedule
+      </ion-label>
+    </ion-item>
+    <!-- <ion-button expand="block" color="secondary" (click)="saveSettings()">Save</ion-button> -->
+  </ion-list> 
+
+
+
+  <ion-list *ngIf="page == 'logs'">
+    <ion-row padding class="form-header"><ion-col class="text-center">ACTIVITY LOG</ion-col></ion-row>
+
+    <ion-item-divider>
+      <ion-label>
+        Profile update last August 29, 2019
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item-divider>
+      <ion-label>
+        Job confirm for Battery Replacement
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item-divider>
+      <ion-label>
+        Job cancelled for Room Service
+      </ion-label>
+    </ion-item-divider>
   </ion-list>  
 </ion-content>

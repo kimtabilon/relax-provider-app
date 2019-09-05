@@ -91,6 +91,7 @@ export class CategoryPage implements OnInit {
           this.title = 'Add Service'; 
           this.loading.dismiss();
   	  },error => { 
+        console.log(error);
         this.loading.dismiss();
         this.title = 'Add Service'; 
       }); 
@@ -103,7 +104,7 @@ export class CategoryPage implements OnInit {
     if(category.services.length) {
       this.router.navigate(['/tabs/service'],{
         queryParams: {
-            value : JSON.stringify(category)
+            category_id : category.id
         },
       });
     } else {

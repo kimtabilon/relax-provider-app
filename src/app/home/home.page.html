@@ -32,14 +32,16 @@
   </div>  
 
     <ion-list lines="none">
-      <ion-item *ngIf="myServices.length==0">No Services Found</ion-item>
-      <ion-item *ngFor="let service of myServices" (click)="tapService(service)" detail="false">
-        <ion-icon slot="start" name="{{service.icon}}" class="with-border"></ion-icon>
-        <ion-label text-wrap><strong>{{service.name}}</strong><br>
-          <span class="info" *ngIf="service.pivot.status==0">Inactive</span>
-          <span class="info" *ngIf="service.pivot.status==1">Active</span>
+      <ion-item *ngIf="myOptions.length==0">No Services Found</ion-item>
+      <ion-item *ngFor="let option of myOptions; let i = index" (click)="tapOption(option, i)" detail="false">
+        <ion-icon slot="start" name="{{option.icon}}" class="with-border"></ion-icon>
+        <ion-label text-wrap><strong>{{option.name}}</strong><br>
+          <span class="info">{{option.service.name}}</span><br>
+          <span class="info" *ngIf="option.pivot.status=='Inactive'">Inactive</span>
+          <span class="info" *ngIf="option.pivot.status=='Active'">Active</span>
+          <span class="info" *ngIf="option.enable_quote=='Yes'"> - For Quotation</span>
         </ion-label>
-        <ion-icon *ngIf="service.pivot.status" slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
+        <ion-icon *ngIf="option.pivot.status == 'Active'" slot="end" name="arrow-dropright-circle" class="arrow"></ion-icon>
       </ion-item>  
     </ion-list>
 </ion-content>
