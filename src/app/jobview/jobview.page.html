@@ -30,7 +30,32 @@
   
   <ion-list lines="none">
     <ion-row></ion-row>
-    <div *ngIf="heroExist">
+    <div>
+
+      <ion-row padding class="form-header"><ion-col class="text-center">Customer Information</ion-col></ion-row>
+
+      <ion-row padding class="field-wrap">
+        <span class="field-text">Name</span>
+        <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.name" placeholder="Name"></ion-input>
+      </ion-row>
+
+      <ion-row padding class="field-wrap">
+        <span class="field-text">Address</span>
+        <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
+        <ion-textarea [readonly]="true" [(ngModel)]="customer_info.address" placeholder="Address" class="field" ></ion-textarea>
+      </ion-row>
+
+      <button *ngIf="status == 'Pending'" class="btn btn-signup" (click)="chatHero()" >CHAT CLIENT</button>
+
+
+      <!-- <ion-row padding class="field-wrap">
+        <span class="field-text">Contact</span>
+        <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
+        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.contact" placeholder="Contact"></ion-input>
+      </ion-row> -->
+    </div>
+    <!-- <div *ngIf="heroExist">
       <ion-row padding class="form-header"><ion-col class="text-center">Hero Provider</ion-col></ion-row>
       <ion-row padding class="field-wrap">
         <span class="field-text">Name</span>
@@ -42,7 +67,7 @@
         <ion-label class="field-label"><ion-icon name="cash" class="field-icon"></ion-icon></ion-label>
         <ion-input [readonly]="true" class="field" value="{{job.amount}}"></ion-input>
       </ion-row>
-    </div>
+    </div> -->
 
     <div *ngIf="formExist">
       <ion-row padding class="form-header"><ion-col class="text-center">Job Details</ion-col></ion-row>
@@ -85,31 +110,13 @@
       </ion-row>
     </div>
 
-    <div>
-      <ion-row padding class="form-header"><ion-col class="text-center">Customer Information</ion-col></ion-row>
-      <ion-row padding class="field-wrap">
-        <span class="field-text">Name</span>
-        <ion-label class="field-label"><ion-icon name="person" class="field-icon"></ion-icon></ion-label>
-        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.name" placeholder="Name"></ion-input>
-      </ion-row>
-      <ion-row padding class="field-wrap">
-        <span class="field-text">Address</span>
-        <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
-        <ion-textarea [readonly]="true" [(ngModel)]="customer_info.address" placeholder="Address" class="field" ></ion-textarea>
-      </ion-row>
-      <!-- <ion-row padding class="field-wrap">
-        <span class="field-text">Contact</span>
-        <ion-label class="field-label"><ion-icon name="call" class="field-icon"></ion-icon></ion-label>
-        <ion-input [readonly]="true" class="field" [(ngModel)]="customer_info.contact" placeholder="Contact"></ion-input>
-      </ion-row> -->
-    </div>
-
     <button *ngIf="status == 'For Confirmation'" class="btn btn-login" (click)="tapConfirm()" >CONFIRM</button>
     <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapStartJob()" >START JOB</button>
     <button *ngIf="enableNoshow" class="btn btn-login" (click)="tapNoShow()" >NO SHOW</button>
     <button *ngIf="status == 'For Confirmation' || status == 'Pending'" class="btn btn-signup" (click)="tapDeny()" >CANCEL JOB</button>
     
     <button *ngIf="status == 'In Progress'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
+    <button *ngIf="status == 'Completed'" class="btn btn-login" (click)="tapReview()" >Write a Review</button>
 
   </ion-list>
     

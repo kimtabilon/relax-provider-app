@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Write a Review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<form #form="ngForm" (ngSubmit)="writeReview(form)">
+    <ion-list lines="full" class="ion-no-margin ion-no-padding">
+		  <ion-list-header>Customer: {{parse(job.customer_info).name}}</ion-list-header>
+
+		  <ion-item>
+		    <ion-label position="stacked">Ratings</ion-label>
+		    <ion-select ngModel name="ratings" placeholder="5 highest">
+		      <ion-select-option value="5">5</ion-select-option>
+		      <ion-select-option value="4">4</ion-select-option>
+		      <ion-select-option value="3">3</ion-select-option>
+		      <ion-select-option value="2">2</ion-select-option>
+		      <ion-select-option value="1">1</ion-select-option>
+		    </ion-select>
+		  </ion-item>
+
+		  <ion-item>
+        <ion-label position="stacked">Reviews</ion-label>
+        <ion-textarea ngModel name="reviews"></ion-textarea>
+      </ion-item>
+
+		</ion-list>
+		<div class="ion-padding">
+      <ion-button expand="block" type="submit" class="ion-no-margin">DONE</ion-button>
+    </div>
+  </form>
+</ion-content>

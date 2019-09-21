@@ -101,6 +101,7 @@ export class HomePage implements OnInit {
       this.http.post(this.env.HERO_API + 'hero/options',{id: this.user.id})
         .subscribe(data => {
             let response:any = data;
+            console.log(response);
             this.myOptions = response.data.options;
             this.loading.dismiss();
         },error => { 

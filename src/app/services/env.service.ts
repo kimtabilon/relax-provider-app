@@ -16,8 +16,6 @@ export class EnvService {
   // HERO_ADMIN = 'http://127.0.0.1:8000/';	
   // HERO_API = 'http://127.0.0.1:8000/api/';  
   
-  // APP_ID = 'relaxretffgsfdgh=';
-  // APP_ID = 'hero435dsfhjdfgrt=';	
   APP_ID = 'heroPROasdfr45fd';
 
   constructor() { }

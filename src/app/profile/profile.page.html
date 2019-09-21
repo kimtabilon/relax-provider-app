@@ -23,21 +23,43 @@
       </ion-col>
     </ion-row>
 
-    <span class="service-label" (click)="tapMyProfile()" [ngClass]="page=='profile' ? 'active-tab' : ''">
+    <!-- Scrollable Segment -->
+    <ion-segment scrollable (ionChange)="segmentChanged($event)" color="secondary">
+      <ion-segment-button value="profile" checked>
+        <ion-icon name="person"></ion-icon>
+        <ion-label>Profile</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="settings">
+        <ion-icon name="settings"></ion-icon>
+        <ion-label>Settings</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="reviews">
+        <ion-icon name="mail"></ion-icon>
+        <ion-label>Reviews</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logs">
+        <ion-icon name="list-box"></ion-icon>
+        <ion-label>Logs</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- <span class="service-label" (click)="tapMyProfile()" [ngClass]="page=='profile' ? 'active-tab' : ''">
       <ion-icon name="person"></ion-icon>
-    </span>
+    </span> -->
     <!-- <span class="service-label" (click)="tapMyCard()" [ngClass]="page=='card' ? 'active-tab' : ''">
       <ion-icon name="card"></ion-icon>
     </span> -->
-    <span class="service-label" (click)="tapMySettings()" [ngClass]="page=='settings' ? 'active-tab' : ''">
+    <!-- <span class="service-label" (click)="tapMySettings()" [ngClass]="page=='settings' ? 'active-tab' : ''">
       <ion-icon name="settings"></ion-icon>
     </span>
     <span class="service-label" (click)="tapMyLogs()" [ngClass]="page=='logs' ? 'active-tab' : ''">
       <ion-icon name="list-box"></ion-icon>
-    </span>
+    </span> -->
   </div>  
   
   <ion-list lines="none" *ngIf="page=='profile'">
+
+
 
     <div class="field-outer-wrap">
       <ion-row padding class="form-header"><ion-col class="text-center">ACCOUNT</ion-col></ion-row>
@@ -204,7 +226,7 @@
     <ion-button expand="block" color="secondary">Save</ion-button>
   </ion-list> -->
 
-  <ion-list *ngIf="page == 'settings'">
+  <ion-list class="settings" *ngIf="page == 'settings'">
     <ion-row padding class="form-header"><ion-col class="text-center">SETTINGS</ion-col></ion-row>
 
     <ion-item>
@@ -242,6 +264,19 @@
       </ion-label>
     </ion-item>
     <!-- <ion-button expand="block" color="secondary" (click)="saveSettings()">Save</ion-button> -->
+  </ion-list> 
+
+  <ion-list *ngIf="page == 'reviews'">
+    <ion-row padding class="form-header"><ion-col class="text-center">RATINGS & REVIEWS</ion-col></ion-row>
+
+    <ion-item *ngFor="let review of reviews">
+      <ion-label text-wrap>
+        <ion-icon slot="icon-only" name="star" *ngFor="let item of [].constructor(review.star); let i = index"></ion-icon>
+        <ion-icon slot="icon-only" name="star-outline" *ngFor="let item of [].constructor(5 - review.star); let i = index"></ion-icon>
+        <h1>{{parse(review.customer_info).name}}</h1>
+        {{review.comment}}
+      </ion-label>
+    </ion-item>
   </ion-list> 
 
 

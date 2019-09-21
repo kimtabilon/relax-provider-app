@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, AlertController } from '@ionic/angular';
 import { LoginPage } from '../login/login.page';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgForm, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
@@ -40,7 +40,7 @@ export class RegisterPage implements OnInit {
 
   eightenyearsAgo:any = '';
 
-  signup_btn:any = 'SIGN UP';
+  signup_btn:any = 'CREATE ACCOUNT';
 
   constructor(
     private http: HttpClient,
@@ -52,38 +52,47 @@ export class RegisterPage implements OnInit {
     public loading: LoadingService,
     private env: EnvService,
     public formBuilder: FormBuilder,
-    private orderPipe: OrderPipe
+    private orderPipe: OrderPipe,
+    public alertCtrl: AlertController,
   ) {
   }
 
   tapProvince(event){ 
+    // console.log(event.detail.value);
     let province:any = event.value;
     fetch('./assets/json/refcitymun.json').then(res => res.json())
     .then(json => {
+      // console.log(json.RECORDS);
       let records:any = json.RECORDS
       this.cities = records.filter(item => item.provCode === province.provCode);
       this.cities = this.orderPipe.transform(this.cities, 'provDesc');
 
+      // console.log(this.cities);
     });
   };
 
   tapCity(event){ 
+    // console.log(event.detail.value);
     let city:any = event.value;
     fetch('./assets/json/refbrgy.json').then(res => res.json())
     .then(json => {
+      // console.log(json.RECORDS);
       let records:any = json.RECORDS
       this.barangays = records.filter(item => item.citymunCode === city.citymunCode);
       this.barangays = this.orderPipe.transform(this.barangays, 'provDesc');
 
+      // console.log(this.barangays);
     });
   };
 
   tapBarangay(event){ 
+    // console.log(event.detail.value);
   };
 
   ngOnInit() {
     fetch('./assets/json/refprovince.json').then(res => res.json())
     .then(json => {
+      // console.log(json.RECORDS);
       this.provinces = this.orderPipe.transform(json.RECORDS, 'provDesc');
     });
 
@@ -231,49 +240,113 @@ export class RegisterPage implements OnInit {
     ],
   };
 
+  async notifyEmailExist() {
+    let alert = await this.alertCtrl.create({
+      header: 'Email Issue',
+      message: 'Email already used.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            this.navCtrl.navigateRoot('/login');
+          }
+        },
+        {
+          text: 'Try Again',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async notifyRegistrationSuccess(email, password) {
+    let alert = await this.alertCtrl.create({
+      header: 'Success',
+      message: 'You are now registered! Check your email to activate account. If you dont recieved email from us, tap Resend.',
+      buttons: [
+        {
+          text: 'Resend',
+          cssClass: 'secondary',
+          handler: () => {
+            this.notifyRegistrationSuccess(email, password);
+            this.http.post(this.env.API_URL + 'hero/mail/resendactivation',{password: password, email: email})
+              .subscribe(data => {
+                  let response:any = data;
+                  this.loading.dismiss();
+                  this.alertService.presentToast("Check your Email for your Activation Link");
+              },error => { 
+                console.log(error);
+                this.loading.dismiss();
+                this.alertService.presentToast("Account not Found");
+              });
+          }
+        },
+        {
+          text: 'Done',
+          handler: (blah) => {
+            this.navCtrl.navigateRoot('/login');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   onSubmit(values) {
     this.loading.present();
     // console.log(values);
     this.signup_btn = 'Please wait...';
     if(this.validations_form.valid) {
-      this.authService.register(
-          values.first_name, 
-          values.middle_name, 
-          values.last_name, 
-          
-          values.street, 
-          values.barangay.brgyDesc, 
-          values.city.citymunDesc, 
-          values.province.provDesc, 
-          values.country, 
-          values.zip, 
 
-          values.birthmonth, 
-          values.birthday, 
-          values.birthyear, 
-          values.gender, 
-          values.country_phone.phone,   
+      this.http.post(this.env.API_URL + 'customer/mail/check',{email: values.email})
+      .subscribe(data => {
+        this.authService.register(
+            values.first_name, 
+            values.middle_name, 
+            values.last_name, 
+            
+            values.street, 
+            values.barangay.brgyDesc, 
+            values.city.citymunDesc, 
+            values.province.provDesc, 
+            values.country, 
+            values.zip, 
 
-          values.email, 
-          values.matching_passwords.password,
-          values.matching_passwords.confirm_password
-        ).subscribe(
-        data => {
-          this.loading.dismiss();
-          this.alertService.presentToast('You are now registered! Check your email to activate account.');
-          this.navCtrl.navigateRoot('/login');
-          this.signup_btn = 'Redirect to login...';
-        },
-        error => {
-          this.signup_btn = 'Try Again';
-          this.loading.dismiss();
-          this.alertService.presentToast('Email already exist.');
-          console.log(error);
-        },
-        () => {
-          
-        }
-      );
+            values.birthmonth, 
+            values.birthday, 
+            values.birthyear, 
+            values.gender, 
+            values.country_phone.phone,   
+
+            values.email, 
+            values.matching_passwords.password,
+            values.matching_passwords.confirm_password
+          ).subscribe(
+          data => {
+            this.loading.dismiss();
+            this.notifyRegistrationSuccess(values.email, values.matching_passwords.password);
+          },
+          error => {
+            this.signup_btn = 'Try Again';
+            this.loading.dismiss();
+            this.alertService.presentToast('Email already exist.');
+            console.log(error);
+          },
+          () => {
+            
+          }
+        );
+      },error => { 
+        this.notifyEmailExist();
+        this.loading.dismiss(); 
+        this.signup_btn = 'CREATE ACCOUNT';
+      });
+
     } else {
       let message:any = 'Input all required fields. ';
       for (let key in this.validation_messages) {

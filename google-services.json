@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "694654925682",
+    "firebase_url": "https://hero-client-app-f877b.firebaseio.com",
+    "project_id": "hero-client-app-f877b",
+    "storage_bucket": "hero-client-app-f877b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694654925682:android:e168fad4be2dab9cf53beb",
+        "android_client_info": {
+          "package_name": "io.ionic.heroapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694654925682-7rb0lldqib0sb5krick88f8p6gcle2hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeEWrOjax6GwNmAGUeH_c9oNsjszWSLao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694654925682-7rb0lldqib0sb5krick88f8p6gcle2hg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

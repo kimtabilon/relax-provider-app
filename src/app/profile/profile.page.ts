@@ -85,6 +85,7 @@ export class ProfilePage implements OnInit {
   provinces:any = [];
   cities:any = [];
   barangays:any = [];
+  reviews:any = [];
 
   constructor(
   	private menu: MenuController, 
@@ -221,39 +222,6 @@ export class ProfilePage implements OnInit {
 
   }
 
-  tapMyProfile(){
-  	this.loading.present();
-  	this.page='profile';
-  	this.loading.dismiss();
-  }
-
-  tapMyCard(){
-    this.loading.present();
-    this.page='card';
-    this.loading.dismiss();
-  }
-
-  tapMySettings(){
-    this.loading.present();
-
-    fetch('./assets/json/refprovince.json').then(res => res.json())
-    .then(json => {
-      let records:any = json.RECORDS
-      this.province = records.filter(item => item.provDesc === this.account.address.province);
-    });
-
-    fetch('./assets/json/refcitymun.json').then(res => res.json())
-    .then(json => {
-      let records:any = json.RECORDS
-      this.preferredCities = records.filter(item => item.provCode === this.province[0].provCode);
-      this.preferredCities = this.orderPipe.transform(this.preferredCities, 'provDesc');
-      // console.log(this.cities);
-    });
-
-    this.page='settings';
-    this.loading.dismiss();
-  }
-
   savePreferredLocation() {
     // console.log(this.account.settings.preferred_location);
     this.loading.present();
@@ -291,10 +259,59 @@ export class ProfilePage implements OnInit {
     // console.log(this.account);
   }
 
-  tapMyLogs(){
-    this.loading.present();
-    this.page='logs';
-    this.loading.dismiss();
+  segmentChanged(ev: any) {
+    switch (ev.detail.value) {
+      case "profile":
+        this.loading.present();
+        this.page='profile';
+        this.loading.dismiss();
+        break;
+
+      case "settings":
+        this.loading.present();
+
+        fetch('./assets/json/refprovince.json').then(res => res.json())
+        .then(json => {
+          let records:any = json.RECORDS
+          this.province = records.filter(item => item.provDesc === this.account.address.province);
+        });
+
+        fetch('./assets/json/refcitymun.json').then(res => res.json())
+        .then(json => {
+          let records:any = json.RECORDS
+          this.preferredCities = records.filter(item => item.provCode === this.province[0].provCode);
+          this.preferredCities = this.orderPipe.transform(this.preferredCities, 'provDesc');
+          // console.log(this.cities);
+        });
+
+        this.page='settings';
+        this.loading.dismiss();
+        break;
+
+      case "logs":
+        this.loading.present();
+        this.page='logs';
+        this.loading.dismiss();
+        break;
+
+      case "reviews":
+        this.loading.present();
+
+        this.http.post(this.env.HERO_API + 'reviews/byProvider',{ hero_id: this.account.user.id })
+          .subscribe(data => {
+            let response:any = data; 
+            this.reviews = response.data;
+          },error => { this.alertService.presentToast("Somethings went wrong");
+        },() => { });  
+        
+        this.page='reviews';
+        this.loading.dismiss();
+        break;
+      
+      default:
+        // code...
+        break;
+    }
   }
 
   tapUpdate() {
@@ -306,6 +323,10 @@ export class ProfilePage implements OnInit {
     },() => { this.alertService.presentToast("Profile updated!"); });  
 
     this.loading.dismiss();
+  }
+
+  parse(customer_info) {
+    return JSON.parse(customer_info);
   }
 
   async tapUpdateAccount() {

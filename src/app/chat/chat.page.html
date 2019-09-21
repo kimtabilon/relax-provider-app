@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="primary">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+		<ion-chip class="ion-margin-start">
+      <ion-avatar>
+        <img src="{{ client.photo }}">
+      </ion-avatar>
+      <ion-label>{{ client.name }}</ion-label>
+    </ion-chip>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen [scrollEvents]="true" #content>
+  <ion-list>
+    <ion-list-header>
+      Recent Conversations
+    </ion-list-header>
+
+    <ion-item lines="full" *ngFor="let msg of messages">
+      <ion-avatar slot="start" *ngIf="msg.from=='client'">
+        <img src="{{client.photo}}">
+      </ion-avatar>
+
+      <ion-avatar slot="end" *ngIf="msg.from=='provider'">
+        <img src="{{provider.photo}}">
+      </ion-avatar>
+      <ion-label class="ion-text-wrap">
+        <p *ngIf="msg.from=='provider'" class="text-right">{{msg.chat}}</p>
+        <p *ngIf="msg.from=='client'">{{msg.chat}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-input placeholder="Chat" [(ngModel)]="chat"></ion-input>
+
+    <ion-buttons slot="primary" (click)="send()">
+      <ion-button>
+        <ion-icon slot="icon-only" name="send" ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

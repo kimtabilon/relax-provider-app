@@ -23,6 +23,8 @@ import { OrderModule } from 'ngx-order-pipe';
 
 import {SchedulePageModule} from './schedule/schedule.module';
 import {TermPageModule} from './term/term.module';
+import {ChatPageModule} from './chat/chat.module';
+import {ReviewPageModule} from './review/review.module';
 
 import { IonicSelectableModule } from 'ionic-selectable';
 
@@ -39,6 +41,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
     SchedulePageModule,
     TermPageModule,
     IonicSelectableModule,
+    ChatPageModule,
+    ReviewPageModule,
   ],
   providers: [
     StatusBar,

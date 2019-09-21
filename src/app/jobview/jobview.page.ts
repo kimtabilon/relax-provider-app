@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, NavController, AlertController } from '@ionic/angular';
+import { MenuController, NavController, ModalController, AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user';
 import { Profile } from 'src/app/models/profile';
@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage';
 import { LoadingService } from 'src/app/services/loading.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ChatPage } from '../chat/chat.page';
+import { ReviewPage } from '../review/review.page';
 
 @Component({
   selector: 'app-jobview',
@@ -56,7 +58,8 @@ export class JobviewPage implements OnInit {
     public loading: LoadingService,
     private http: HttpClient,
     private env: EnvService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public modalController: ModalController,
   ) {
   	this.menu.enable(true);	
   }
@@ -93,6 +96,7 @@ export class JobviewPage implements OnInit {
             this.job = response.data;
             this.attributes = JSON.parse(this.job.form_value);
             this.customer_info = JSON.parse(this.job.customer_info);
+
             this.status = this.job.status;
 
             if(this.job.form !== null) {
@@ -160,6 +164,7 @@ export class JobviewPage implements OnInit {
             
             this.loading.dismiss();
         },error => { 
+          console.log(error);
           this.title = 'Back'; 
           this.alertService.presentToast("Client removed this job.");
 
@@ -172,7 +177,7 @@ export class JobviewPage implements OnInit {
             console.log(error);
           },() => { 
             this.loading.dismiss();
-            this.navCtrl.navigateRoot('/tabs/inbox'); 
+            this.navCtrl.navigateRoot('/tabs/job'); 
           });
 
           this.loading.dismiss(); 
@@ -363,6 +368,40 @@ export class JobviewPage implements OnInit {
       ]
     });
     await alert.present();
+  }
+
+  async chatHero() {
+    const modal = await this.modalController.create({
+      component: ChatPage,
+      componentProps: { 
+        job: this.job,
+        customer: this.customer_info
+      }
+    });
+
+    modal.onDidDismiss()
+      .then((data) => {
+        let response:any = data;
+    });
+
+    return await modal.present();
+  }
+
+  async tapReview() {
+
+    const modal = await this.modalController.create({
+      component: ReviewPage,
+      componentProps: { 
+        job: this.job
+      }
+    });
+
+    modal.onDidDismiss()
+      .then((data) => {
+        let response:any = data;
+    });
+
+    return await modal.present();
   }
 
   logout() {

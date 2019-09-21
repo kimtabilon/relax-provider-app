@@ -95,18 +95,20 @@
 			--color: $gold;
 			color: $gold;
 
-			ion-icon {
-				--background: $gold;
-				background: $gold;
-				border-radius: 5px;
-				padding: 2px;
-				margin-right: 5px;
-			}
+			
 		}
 		ion-item.no-background {
 			--background: none;
 			background: none;
 		}
+	}
+
+	.settings ion-icon {
+		--background: $gold;
+		background: $gold;
+		border-radius: 5px;
+		padding: 2px;
+		margin-right: 5px;
 	}
 
 	.field-outer-wrap {
@@ -121,9 +123,30 @@
 		color: $gold;
 		font-size: 14pt;
 	}
+
+	ion-segment {
+		ion-segment-button {
+			background: $item-blue;
+			color: $gold;
+
+			div.segment-button-indicator {
+				display: none;
+			}
+
+		}
+
+		.segment-button-checked {
+			background: $gold;
+			color: $brown;
+		}
+
+		.segment-button-indicator {
+			display: none;
+		}
+	}
+
 	.active-tab {
-		background: $gold;
-		color: $brown;
+		
 	}
 
 	.bg-item-blue {
