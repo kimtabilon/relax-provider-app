@@ -2,10 +2,10 @@
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+      pullingIcon="refresh"
+      pullingText="Release to refresh"
+      refreshingSpinner="crescent"
+      >
     </ion-refresher-content>
   </ion-refresher>
   <div class="body">
@@ -18,7 +18,7 @@
     <ion-row class="user">
       <ion-col col-12>
         <img class="img" src="{{photo}}"><br>
-        <span class="label">Welcome Back</span><br>
+        <span class="label">Welcome</span><br>
         <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
       </ion-col>
     </ion-row>
@@ -112,10 +112,11 @@
 
     <button *ngIf="status == 'For Confirmation'" class="btn btn-login" (click)="tapConfirm()" >CONFIRM</button>
     <button *ngIf="status == 'Pending'" class="btn btn-login" (click)="tapStartJob()" >START JOB</button>
-    <button *ngIf="enableNoshow" class="btn btn-login" (click)="tapNoShow()" >NO SHOW</button>
-    <button *ngIf="status == 'For Confirmation' || status == 'Pending'" class="btn btn-signup" (click)="tapDeny()" >CANCEL JOB</button>
-    
     <button *ngIf="status == 'In Progress'" class="btn btn-login" (click)="tapDone()" >JOB DONE</button>
+    <button *ngIf="enableNoshow" class="btn btn-signup" (click)="tapNoShow()" >NO SHOW</button>
+    <button *ngIf="status == 'For Confirmation' || status == 'Pending'" class="btn btn-signup" (click)="tapDeny()" >CANCEL JOB</button>
+
+    <button *ngIf="status == 'Waiting for Payment' || status == 'Paid'" class="btn btn-login" (click)="tapRecievedCash()" >Recieved Cash</button>
     <button *ngIf="status == 'Completed'" class="btn btn-login" (click)="tapReview()" >Write a Review</button>
 
   </ion-list>

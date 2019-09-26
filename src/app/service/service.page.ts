@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user';
-import { Profile } from 'src/app/models/profile';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
-import { GetService } from 'src/app/services/get.service';
 import { Storage } from '@ionic/storage';
 import { Router, ActivatedRoute } from '@angular/router';
 import { EnvService } from 'src/app/services/env.service';
@@ -44,7 +41,6 @@ export class ServicePage implements OnInit {
     private storage: Storage,
     private alertService: AlertService,
     public loading: LoadingService,
-    public getService: GetService,
     public router : Router,
     private env: EnvService,
     public activatedRoute : ActivatedRoute,
@@ -74,7 +70,6 @@ export class ServicePage implements OnInit {
         this.photo = this.env.DEFAULT_IMG;
       }
     });
-    this.authService.validateApp(this.user.email,this.user.password);
 
     this.activatedRoute.queryParams.subscribe((res)=>{
 

@@ -14,7 +14,7 @@ export class LoadingService {
     this.isLoading = true;
     return await this.loadingController.create({
       duration: 5000,
-      spinner: 'dots',
+      spinner: 'crescent',
       cssClass:'custom-loader-class'
     }).then(a => {
       a.present().then(() => {

@@ -25,6 +25,7 @@ import {SchedulePageModule} from './schedule/schedule.module';
 import {TermPageModule} from './term/term.module';
 import {ChatPageModule} from './chat/chat.module';
 import {ReviewPageModule} from './review/review.module';
+import {NetworkPageModule} from './network/network.module';
 
 import { IonicSelectableModule } from 'ionic-selectable';
 
@@ -43,6 +44,7 @@ import { IonicSelectableModule } from 'ionic-selectable';
     IonicSelectableModule,
     ChatPageModule,
     ReviewPageModule,
+    NetworkPageModule,
   ],
   providers: [
     StatusBar,

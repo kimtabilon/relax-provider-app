@@ -2,10 +2,10 @@
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+      pullingIcon="refresh"
+      pullingText="Release to refresh"
+      refreshingSpinner="crescent"
+      >
     </ion-refresher-content>
   </ion-refresher>
   <div class="body">
@@ -18,7 +18,7 @@
     <ion-row class="user">
       <ion-col col-12>
         <img class="img" src="{{photo}}"><br>
-        <span class="label">Welcome Back</span><br>
+        <span class="label">Welcome</span><br>
         <span class="name" *ngIf="account.user != undefined">{{ account.profile.first_name  }}</span><br>
       </ion-col>
     </ion-row>
@@ -42,19 +42,6 @@
         <ion-label>Logs</ion-label>
       </ion-segment-button>
     </ion-segment>
-
-    <!-- <span class="service-label" (click)="tapMyProfile()" [ngClass]="page=='profile' ? 'active-tab' : ''">
-      <ion-icon name="person"></ion-icon>
-    </span> -->
-    <!-- <span class="service-label" (click)="tapMyCard()" [ngClass]="page=='card' ? 'active-tab' : ''">
-      <ion-icon name="card"></ion-icon>
-    </span> -->
-    <!-- <span class="service-label" (click)="tapMySettings()" [ngClass]="page=='settings' ? 'active-tab' : ''">
-      <ion-icon name="settings"></ion-icon>
-    </span>
-    <span class="service-label" (click)="tapMyLogs()" [ngClass]="page=='logs' ? 'active-tab' : ''">
-      <ion-icon name="list-box"></ion-icon>
-    </span> -->
   </div>  
   
   <ion-list lines="none" *ngIf="page=='profile'">
@@ -140,8 +127,6 @@
       
     </div>
 
-    <!-- <button class="btn btn-login" (click)="tapUpdate()" [disabled]="account.settings.account_lock" >Save</button> -->
-
     <div class="field-outer-wrap">
       <ion-row padding class="form-header"><ion-col class="text-center">ADDRESS</ion-col></ion-row>
       <ion-row padding class="field-wrap">
@@ -151,27 +136,40 @@
       </ion-row>
 
       <ion-row padding class="field-wrap">
-        <span class="field-text">Barangay</span>
-        <ion-label class="field-label"><ion-icon name="bookmarks" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="account.address.barangay" [disabled]="account.settings.account_lock" placeholder="Barangay"></ion-input>
+        <span class="field-text">Province</span>
+        <ion-label class="field-label"><ion-icon name="map" class="field-icon"></ion-icon></ion-label>
+        <!-- <ion-input class="field" [(ngModel)]="account.address.province" [disabled]="account.settings.account_lock" placeholder="Province"></ion-input> -->
+        
+        <ion-select placeholder="Province" [(ngModel)]="account.address.province" class="field" (ionChange)="tapProvince($event)" [disabled]="account.settings.account_lock" >
+          <ion-select-option *ngFor="let prov of provinces" value="{{prov.provDesc}}">{{prov.provDesc}}</ion-select-option>
+        </ion-select>
+
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">City</span>
         <ion-label class="field-label"><ion-icon name="pin" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="account.address.city" [disabled]="account.settings.account_lock" placeholder="City"></ion-input>
+        <!-- <ion-input class="field" [(ngModel)]="account.address.city" [disabled]="account.settings.account_lock" placeholder="City"></ion-input> -->
+      
+        <ion-select placeholder="City" [(ngModel)]="account.address.city" class="field" (ionChange)="tapCity($event)" [disabled]="account.settings.account_lock" >
+          <ion-select-option *ngFor="let city of cities" value="{{city.citymunDesc}}">{{city.citymunDesc}}</ion-select-option>
+        </ion-select>
       </ion-row>
 
       <ion-row padding class="field-wrap">
-        <span class="field-text">Province</span>
-        <ion-label class="field-label"><ion-icon name="map" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="account.address.province" [disabled]="account.settings.account_lock" placeholder="Province"></ion-input>
+        <span class="field-text">Barangay</span>
+        <ion-label class="field-label"><ion-icon name="bookmarks" class="field-icon"></ion-icon></ion-label>
+        <!-- <ion-input class="field" [(ngModel)]="account.address.barangay" [disabled]="account.settings.account_lock" placeholder="Barangay"></ion-input> -->
+        
+        <ion-select placeholder="Barangay" [(ngModel)]="account.address.barangay" class="field" (onChange)="tapBarangay($event)" [disabled]="account.settings.account_lock" >
+          <ion-select-option *ngFor="let brgy of barangays" value="{{brgy.brgyDesc}}">{{brgy.brgyDesc}}</ion-select-option>
+        </ion-select>
       </ion-row>
 
       <ion-row padding class="field-wrap">
         <span class="field-text">Country</span>
         <ion-label class="field-label"><ion-icon name="planet" class="field-icon"></ion-icon></ion-label>
-        <ion-input class="field" [(ngModel)]="account.address.country" [disabled]="account.settings.account_lock" placeholder="Country"></ion-input>
+        <ion-input class="field" [(ngModel)]="account.address.country" [disabled]="true" placeholder="Country"></ion-input>
       </ion-row>
 
       <ion-row padding class="field-wrap">
@@ -181,8 +179,6 @@
       </ion-row>
       
     </div>
-
-    <!-- <button class="btn btn-login" (click)="tapUpdateAddr()" [disabled]="account.settings.account_lock" >Save</button> -->
 
     <div class="field-outer-wrap">
       <ion-row padding class="form-header"><ion-col class="text-center">CONTACT</ion-col></ion-row>
@@ -200,31 +196,9 @@
       
     </div>
 
-    <!-- <button class="btn btn-login" (click)="tapUpdateContact()" [disabled]="account.settings.account_lock" >SAVE</button> -->
     <button class="btn btn-login" (click)="tapUpdateAccount()" *ngIf="account.settings.account_lock==false" >REQUEST FOR UPDATE</button>
 
   </ion-list>
-  
-  <!-- <ion-list *ngIf="page == 'card'" lines="full">
-    <ion-row padding class="form-header"><ion-col class="text-center">CARD INFORMATION</ion-col></ion-row>
-    <ion-item>
-      <ion-label position="floating">Account Number</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Name</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Address</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Bank</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-    <ion-button expand="block" color="secondary">Save</ion-button>
-  </ion-list> -->
 
   <ion-list class="settings" *ngIf="page == 'settings'">
     <ion-row padding class="form-header"><ion-col class="text-center">SETTINGS</ion-col></ion-row>

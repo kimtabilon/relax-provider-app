@@ -151,13 +151,24 @@ export class JobviewPage implements OnInit {
               this.enableNoshow = false;
             }
 
-            if(this.job.status == 'Cancelled' || this.job.status == 'Completed') {
+            if(this.job.status == 'Cancelled' || 
+               this.job.status == 'Completed' ||
+               this.job.status == 'Waiting for Payment' ||
+               this.job.status == 'Paid'
+            ) {
               this.enableCancel = false;
             } else {
               this.enableCancel = true;
             }
 
-            if(this.job.status == 'No Show : Client' || this.job.status == 'No Show : Hero' || this.job.status == 'Cancelled' || this.job.status == 'Denied' || this.job.status == 'Completed') {
+            if(this.job.status == 'No Show : Client' || 
+               this.job.status == 'No Show : Hero' || 
+               this.job.status == 'Cancelled' || 
+               this.job.status == 'Denied' || 
+               this.job.status == 'Completed' ||
+               this.job.status == 'Waiting for Payment' ||
+               this.job.status == 'Paid'
+            ) {
               this.enableNoshow = false;
             }
 
@@ -328,6 +339,22 @@ export class JobviewPage implements OnInit {
 
     /*Confirm Jobs*/
     this.http.post(this.env.HERO_API + 'jobs/done',{id: this.job.id})
+      .subscribe(data => {
+      },error => { 
+        this.alertService.presentToast("Server not responding!");
+        console.log(error);
+      },() => { 
+        this.navCtrl.navigateRoot('/tabs/job'); 
+      });  
+
+    this.loading.dismiss();
+  }
+
+  tapRecievedCash() {
+    this.loading.present();
+
+    /*Confirm Jobs*/
+    this.http.post(this.env.HERO_API + 'jobs/recievedCash',{id: this.job.id})
       .subscribe(data => {
       },error => { 
         this.alertService.presentToast("Server not responding!");

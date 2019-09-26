@@ -120,7 +120,17 @@ export class ProfilePage implements OnInit {
   }
 
   doRefresh(event) {
-    this.ionViewWillEnter();
+    this.http.post(this.env.HERO_API + 'hero/login',{email: this.account.user.email, password:  this.account.user.password})
+    .subscribe(data => {
+        let response:any = data;
+        this.storage.set('hero', response);
+        // this.user = response.data;
+        this.ionViewWillEnter();
+    },error => { 
+      this.logout();
+      console.log(error); 
+    });
+    
     setTimeout(() => {
       event.target.complete();
     }, 2000);
@@ -152,16 +162,6 @@ export class ProfilePage implements OnInit {
 
       this.account.user_id = this.account.user.id;
       this.account.app_key = this.env.APP_ID;
-
-      this.http.post(this.env.HERO_API + 'hero/login',{email: this.account.user.email, password:  this.account.user.password})
-      .subscribe(data => {
-          let response:any = data;
-          this.storage.set('hero', response);
-          // this.user = response.data;
-      },error => { 
-        this.logout();
-        console.log(error); 
-      });
 
       if(this.account.profile.addresses.length) {
         this.account.address = this.account.profile.addresses[0];
@@ -217,10 +217,70 @@ export class ProfilePage implements OnInit {
         },() => { 
           // this.alertService.presentToast("Settings saved."); 
       }); 
+
+      fetch('./assets/json/refprovince.json').then(res => res.json())
+      .then(json => {
+        // console.log(json.RECORDS);
+        let records:any = json.RECORDS
+        let province:any = records.filter(item => item.provDesc === this.account.address.province)[0];
+        this.provinces = this.orderPipe.transform(records, 'provDesc'); 
+        
+        fetch('./assets/json/refcitymun.json').then(res => res.json())
+        .then(json => {
+          // console.log(json.RECORDS);
+          let records:any = json.RECORDS
+          let city:any = records.filter(item => item.citymunDesc === this.account.address.city)[0];
+          this.cities = records.filter(item => item.provCode === province.provCode);
+          this.cities = this.orderPipe.transform(this.cities, 'citymunDesc');
+
+          fetch('./assets/json/refbrgy.json').then(res => res.json())
+          .then(json => {
+            let records:any = json.RECORDS
+            this.barangays = records.filter(item => item.citymunCode === city.citymunCode);
+            this.barangays = this.orderPipe.transform(this.barangays, 'brgyDesc');
+          });
+        });
+      });
+
       this.loading.dismiss();
     });
 
   }
+
+  tapProvince(event){ 
+    let prov:any = event.detail.value;
+    fetch('./assets/json/refprovince.json').then(res => res.json())
+    .then(json => {
+      let records:any = json.RECORDS
+      let province:any = records.filter(item => item.provDesc === prov)[0];
+      fetch('./assets/json/refcitymun.json').then(res => res.json())
+      .then(json => {
+        let records:any = json.RECORDS
+        this.cities = records.filter(item => item.provCode === province.provCode);
+        this.cities = this.orderPipe.transform(this.cities, 'citymunDesc');
+      });
+    });
+  };
+
+  tapCity(event){ 
+    let ci:any = event.detail.value;
+    fetch('./assets/json/refcitymun.json').then(res => res.json())
+    .then(json => {
+      let records:any = json.RECORDS
+      let city:any = records.filter(item => item.citymunDesc === ci)[0];
+
+      fetch('./assets/json/refbrgy.json').then(res => res.json())
+      .then(json => {
+        let records:any = json.RECORDS
+        this.barangays = records.filter(item => item.citymunCode === city.citymunCode);
+        this.barangays = this.orderPipe.transform(this.barangays, 'brgyDesc');
+      });
+    });
+  };
+
+  tapBarangay(event){ 
+    
+  };
 
   savePreferredLocation() {
     // console.log(this.account.settings.preferred_location);

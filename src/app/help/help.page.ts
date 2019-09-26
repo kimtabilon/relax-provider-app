@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user';
-import { Profile } from 'src/app/models/profile';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
-import { GetService } from 'src/app/services/get.service';
-import { JobService } from 'src/app/services/job.service';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -45,8 +41,6 @@ export class HelpPage implements OnInit {
     private storage: Storage,
     private alertService: AlertService,
     public loading: LoadingService,
-    public getService: GetService,
-    public jobService: JobService,
     public router : Router,
     private env: EnvService
   ) { 
@@ -66,10 +60,6 @@ export class HelpPage implements OnInit {
 
   ionViewWillEnter() {
     this.loading.present();
-
-    this.http.post(this.env.HERO_API + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });
-    this.http.post(this.env.API_URL + 'check/server',{}).subscribe(data => { },error => { this.alertService.presentToast("Server not found. Check your internet connection."); });  
-
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;  
@@ -78,7 +68,6 @@ export class HelpPage implements OnInit {
       } else {
         this.photo = this.env.DEFAULT_IMG;
       }
-      this.authService.validateApp(this.user.email,this.user.password);
       this.loading.dismiss();
     });
   }

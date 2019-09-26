@@ -65,7 +65,7 @@ export class RegisterPage implements OnInit {
       // console.log(json.RECORDS);
       let records:any = json.RECORDS
       this.cities = records.filter(item => item.provCode === province.provCode);
-      this.cities = this.orderPipe.transform(this.cities, 'provDesc');
+      this.cities = this.orderPipe.transform(this.cities, 'citymunDesc');
 
       // console.log(this.cities);
     });
@@ -79,7 +79,7 @@ export class RegisterPage implements OnInit {
       // console.log(json.RECORDS);
       let records:any = json.RECORDS
       this.barangays = records.filter(item => item.citymunCode === city.citymunCode);
-      this.barangays = this.orderPipe.transform(this.barangays, 'provDesc');
+      this.barangays = this.orderPipe.transform(this.barangays, 'brgyDesc');
 
       // console.log(this.barangays);
     });

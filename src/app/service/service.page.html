@@ -2,10 +2,10 @@
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
-      pullingIcon="arrow-dropdown"
-      pullingText="Pull to refresh"
-      refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+      pullingIcon="refresh"
+      pullingText="Release to refresh"
+      refreshingSpinner="crescent"
+      >
     </ion-refresher-content>
   </ion-refresher>
   <div class="body">
@@ -18,7 +18,7 @@
     <ion-row class="user">
       <ion-col col-12>
         <img class="img" src="{{photo}}"><br>
-        <span class="label">Welcome Back</span><br>
+        <span class="label">Welcome</span><br>
         <span class="name" *ngIf="user != undefined">{{ profile["first_name"]  }}</span><br>
       </ion-col>
     </ion-row>

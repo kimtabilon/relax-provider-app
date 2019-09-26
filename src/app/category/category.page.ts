@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, NavController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user';
-import { Profile } from 'src/app/models/profile';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoadingService } from 'src/app/services/loading.service';
-import { GetService } from 'src/app/services/get.service';
-import { JobService } from 'src/app/services/job.service';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -45,8 +41,6 @@ export class CategoryPage implements OnInit {
     private storage: Storage,
     private alertService: AlertService,
     public loading: LoadingService,
-    public getService: GetService,
-    public jobService: JobService,
     public router : Router,
     private env: EnvService
   ) { 
@@ -75,8 +69,6 @@ export class CategoryPage implements OnInit {
       } else {
         this.photo = this.env.DEFAULT_IMG;
       }
-
-      this.authService.validateApp(this.user.email,this.user.password);
     });
 
   	this.storage.get('app').then((val) => {

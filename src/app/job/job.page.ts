@@ -79,7 +79,6 @@ export class JobPage implements OnInit {
       } else {
         this.photo = this.env.DEFAULT_IMG;
       } 
-      this.authService.validateApp(this.user.email,this.user.password);
 
       /*Get My Jobs*/
       this.http.post(this.env.HERO_API + 'hero/jobs',{id: this.user.id})
