@@ -303,7 +303,7 @@ export class RegisterPage implements OnInit {
     this.signup_btn = 'Please wait...';
     if(this.validations_form.valid) {
 
-      this.http.post(this.env.API_URL + 'customer/mail/check',{email: values.email})
+      this.http.post(this.env.API_URL + 'hero/mail/check',{email: values.email})
       .subscribe(data => {
         this.authService.register(
             values.first_name, 

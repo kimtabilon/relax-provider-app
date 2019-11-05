@@ -60,17 +60,7 @@ export class HomePage implements OnInit {
   }
 
   doRefresh(event) {
-    this.http.post(this.env.HERO_API + 'hero/login',{email: this.user.email, password:  this.user.password})
-    .subscribe(data => {
-        let response:any = data;
-        this.storage.set('hero', response);
-        this.user = response.data;
-        this.ionViewWillEnter();
-    },error => { 
-      this.logout();
-      console.log(error); 
-    });
-
+    this.ionViewWillEnter();
     
     setTimeout(() => {
       event.target.complete();
@@ -84,7 +74,7 @@ export class HomePage implements OnInit {
     this.storage.get('hero').then((val) => {
       this.user = val.data;
       this.profile = val.data.profile;  
-
+      this.checkUser(this.user);
       if(this.profile.photo!==null) {
         this.photo = this.env.IMAGE_URL + 'uploads/' + this.profile.photo;
       } else {
@@ -110,6 +100,18 @@ export class HomePage implements OnInit {
     });
 
   }
+
+  checkUser(user) {
+    this.http.post(this.env.HERO_API + 'hero/login',{email: user.email, password:  user.password})
+    .subscribe(data => {
+        let response:any = data;
+        this.storage.set('hero', response);
+        this.user = response.data;
+    },error => { 
+      this.logout();
+      console.log(error); 
+    });
+  } 
 
   async tapOption(option, i) {
     // this.loading.present();
